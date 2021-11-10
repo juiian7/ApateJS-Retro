@@ -1,0 +1,15 @@
+{
+  "name": "apatejs-retro",
+  "version": "1.0.0",
+  "description": "",
+  "main": "",
+  "scripts": {
+    "build": "tsc && rollup dist/apate.js --file dist/mini.js",
+    "dev": "nodemon --exec \"tsc\" --watch src/ --ext ts"
+  },
+  "dependencies": {
+    "typescript": "4.4.4",
+    "rollup": "2.59.0",
+    "rollup-plugin-dts": "4.0.1"
+  }
+}
