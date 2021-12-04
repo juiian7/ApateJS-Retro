@@ -7,21 +7,24 @@ class SpriteLib {
         this.canvas = document.createElement("canvas");
     }
 
-    async load(src: string | HTMLImageElement): Promise<Sprite> {
+    async load(url: string): Promise<Sprite> {
         let img = new Image();
-        if (typeof src == "string") {
-            try {
-                await new Promise((res, rej) => {
-                    img.onload = res;
-                    img.onerror = rej;
-                    img.src = src;
-                });
-            } catch {
-                console.error("Couldn't load resource: " + src);
-                return { width: 0, height: 0, data: new Uint8ClampedArray([]) };
-            }
-        } else img = src;
 
+        try {
+            await new Promise((res, rej) => {
+                img.onload = res;
+                img.onerror = rej;
+                img.src = url;
+            });
+        } catch {
+            console.error("Couldn't load resource: " + url);
+            return { width: 1, height: 1, data: new Uint8ClampedArray([255, 0, 255, 255]) };
+        }
+
+        return this.loadSync(img);
+    }
+
+    loadSync(img: HTMLImageElement): Sprite {
         this.canvas.width = img.width;
         this.canvas.height = img.height;
         let ctx = this.canvas.getContext("2d");
