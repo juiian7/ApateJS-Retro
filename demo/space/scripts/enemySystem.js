@@ -17,7 +17,7 @@ export default class EnemySystem extends ParticleSystem {
     }
 
     async init() {
-        let sprite = await spritelib.load(document.querySelector("#enemy"));
+        let sprite = spritelib.loadSync(document.querySelector("#enemy"));
         this.frames = spritelib.split(sprite, 8, 8, 0);
 
         this.apate.activeScene.add(this.explosionSystem);

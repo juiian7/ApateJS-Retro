@@ -45,13 +45,14 @@ class Game extends Scene {
         let gameOver = new Entity();
 
         gameOver.set({
-            update: function () {
-                apate.draw.text(Math.round((128 - apate.draw.measureText("Game Over")) / 2), 60, "Game Over", Color.white);
-                apate.draw.text(Math.round((128 - apate.draw.measureText("Press (R) to restart")) / 2), 75, "Press -R- to restart", Color.white);
-
-                if (apate.input.isButtonDown(btnR)) {
+            update: function (delta) {
+                if (this.apate.input.isButtonDown(btnR)) {
                     restart();
                 }
+            },
+            draw: function (draw) {
+                draw.text(Math.round((128 - apate.draw.measureText("Game Over")) / 2), 60, "Game Over", Color.white);
+                draw.text(Math.round((128 - apate.draw.measureText("Press (R) to restart")) / 2), 75, "Press -R- to restart", Color.white);
             },
         });
 

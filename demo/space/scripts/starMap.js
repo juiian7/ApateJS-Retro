@@ -14,7 +14,7 @@ export default class StarMap extends ParticleSystem {
                 x: this.apate.random.betweenInt(0, 128),
                 y: this.apate.random.betweenInt(-128, 128),
                 velY: this.apate.random.between(1, 2),
-                c: Color.white,
+                color: Color.white,
             });
         }
     }
