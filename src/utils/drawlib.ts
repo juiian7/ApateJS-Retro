@@ -62,7 +62,7 @@ export class DrawLib {
             }
         }
     }
-    public spriteExt(x: number, y: number, sprite: Sprite, scale: number, color: Color) {
+    public spriteExt(x: number, y: number, sprite: Sprite, scale: number, color?: Color) {
         if (!sprite) {
             console.warn("Sprite not ready! skipping draw");
             return;
@@ -78,13 +78,15 @@ export class DrawLib {
             if (sprite.data[i + 3] > 0) {
                 for (dx = 0; dx < scale; dx++) {
                     for (dy = 0; dy < scale; dy++) {
-                        this.screen.setPixel(
-                            px + dx + x,
-                            py + dy + y,
-                            (sprite.data[i] + color.r) / 2,
-                            (sprite.data[i + 1] + color.g) / 2,
-                            (sprite.data[i + 2] + color.b) / 2
-                        );
+                        if (color)
+                            this.screen.setPixel(
+                                px + dx + x,
+                                py + dy + y,
+                                (sprite.data[i] + color.r) / 2,
+                                (sprite.data[i + 1] + color.g) / 2,
+                                (sprite.data[i + 2] + color.b) / 2
+                            );
+                        else this.screen.setPixel(px + dx + x, py + dy + y, sprite.data[i], sprite.data[i + 1], sprite.data[i + 2]);
                     }
                 }
             }
@@ -99,8 +101,9 @@ export class DrawLib {
             char = this.fontMap[text[i]];
 
             if (char) {
-                this.spriteExt(x + i * char.width, y, char, scale, { r: (c.r - 128) * 2, g: (c.g - 128) * 2, b: (c.b - 128) * 2 }); // to overwrite color
-            } else this.pixel(x + i * 4, y, c);
+                // TODO: scaleing not working
+                this.spriteExt(x + i * char.width * scale, y, char, scale, { r: (c.r - 128) * 2, g: (c.g - 128) * 2, b: (c.b - 128) * 2 }); // to overwrite color
+            } else this.pixel(x + i * 4 * scale, y, c);
         }
     }
 

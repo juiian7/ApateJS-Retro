@@ -11,7 +11,7 @@ export class Engine {
     public isCursorVisible: boolean = false;
     private _activeScene: Scene = new Scene();
     private lastFrame: boolean = false;
-    private screen: Screen;
+    protected screen: Screen;
 
     public draw: DrawLib;
     public input: Input;
@@ -93,7 +93,23 @@ export class Engine {
         window.requestAnimationFrame(loop);
     }
 
+    public clear() {
+        this.screen.clear(this.clearColor.r, this.clearColor.g, this.clearColor.b);
+    }
+
     public stop() {
         this.lastFrame = true;
+    }
+
+    public resize(width: number, height: number) {
+        this.screen.resize(width, height);
+    }
+
+    public rescale(scale: number) {
+        this.screen.scale = scale;
+    }
+
+    public get htmlElement(): HTMLElement {
+        return this.screen.canvas;
     }
 }

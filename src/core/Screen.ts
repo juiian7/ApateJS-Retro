@@ -7,7 +7,7 @@ export class Screen {
     private textureWidth: number = 128;
     private textureHeight: number = 128;
 
-    private pixelBuffer: Uint8Array;
+    public pixelBuffer: Uint8Array;
 
     constructor() {
         this.canvas = document.createElement("canvas");
@@ -86,6 +86,8 @@ export class Screen {
         this.textureWidth = textureWidth;
         this.textureHeight = textureHeight;
         this.pixelBuffer = new Uint8Array(this.textureWidth * this.textureHeight * 3);
+
+        this.scale = 6;
     }
 
     public set scale(value: number) {

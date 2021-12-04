@@ -3,7 +3,7 @@ import { Engine } from "./Engine.js";
 import { Entity } from "./Entity.js";
 
 export class Scene {
-    private entities: Entity[] = [];
+    protected entities: Entity[] = [];
     private _apateInstance?: Engine;
 
     set apateInstance(value: Engine) {
