@@ -101,9 +101,9 @@ export class DrawLib {
             char = this.fontMap[text[i]];
 
             if (char) {
-                // TODO: scaleing not working
-                this.spriteExt(x + i * char.width * scale, y, char, scale, { r: (c.r - 128) * 2, g: (c.g - 128) * 2, b: (c.b - 128) * 2 }); // to overwrite color
-            } else this.pixel(x + i * 4 * scale, y, c);
+                // TODO: scale not working properly
+                this.spriteExt(x + i * (char.width + 1) * scale, y, char, scale, { r: (c.r - 128) * 2, g: (c.g - 128) * 2, b: (c.b - 128) * 2 }); // to overwrite color
+            } else this.pixel(x + i * 4, y, c);
         }
     }
 
