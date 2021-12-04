@@ -5,7 +5,7 @@
   "main": "",
   "scripts": {
     "build": "tsc && rollup dist/apate.js --file dist/mini.js",
-    "dev": "nodemon --exec \"tsc\" --watch src/ --ext ts"
+    "dev": "nodemon --config nodemon.json"
   },
   "dependencies": {
     "typescript": "4.4.4",

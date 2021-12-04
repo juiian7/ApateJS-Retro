@@ -6,5 +6,5 @@
 
         "outDir": "./dist"
     },
-    "include": ["./src/apate.ts"]
+    "include": ["./src/apate.ts", "./src/wrapper.ts"]
 }
