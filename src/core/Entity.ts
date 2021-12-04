@@ -1,8 +1,10 @@
+import { DrawLib } from "../utils/drawlib.js";
 import type { Engine } from "./Engine.js";
 
 interface ApateEventCollection {
     init?: () => void;
     update?: (delta: number) => void;
+    draw?: (draw: DrawLib) => void;
     destroy?: () => void;
 }
 
@@ -23,6 +25,14 @@ export class Entity {
     public isInitialized: boolean = false;
     // after init scene sets acitve engine
     public apate?: Engine;
+
+    public doUpdate: boolean = true;
+    public doDraw: boolean = true;
+
+    public set isActive(value: boolean) {
+        this.doUpdate = value;
+        this.doDraw = value;
+    }
 
     private config: EntityConfig;
 
@@ -50,5 +60,6 @@ export class Entity {
 
     public init() {}
     public update(delta: number) {}
+    public draw(draw: DrawLib) {}
     public destroy() {}
 }

@@ -51,16 +51,16 @@ export class Engine {
     public run() {
         this.lastFrame = false;
 
-        let lastTime = new Date().getTime();
-        let time = 0;
-        let delta = 0;
+        var lastTime = new Date().getTime();
+        var time = 0;
+        var delta = 0;
 
-        let nextSecond = 100;
+        var nextSecond = 100;
 
-        let lastFrames = 0;
-        let frameCounter = 0;
+        var lastFrames = 0;
+        var frameCounter = 0;
 
-        let loop = function () {
+        var loop = () => {
             time = new Date().getTime();
             delta = time - lastTime;
 
@@ -74,10 +74,13 @@ export class Engine {
 
             this.screen.clear(this.clearColor.r, this.clearColor.g, this.clearColor.b);
 
+            // update
             this._activeScene.update(delta);
-            if (this.showInfo) this.draw.text(1, 1, "FPS:" + lastFrames, Color.white);
-
             this.physic.checkAllCollisions();
+
+            // draw
+            this._activeScene.draw(this.draw);
+            if (this.showInfo) this.draw.text(1, 1, "FPS:" + lastFrames, Color.white);
 
             this.screen.updateScreen();
 
@@ -87,7 +90,6 @@ export class Engine {
             if (!this.lastFrame) window.requestAnimationFrame(loop);
         };
 
-        loop = loop.bind(this);
         window.requestAnimationFrame(loop);
     }
 

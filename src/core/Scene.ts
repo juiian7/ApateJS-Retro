@@ -1,3 +1,4 @@
+import type { DrawLib } from "../utils/drawlib.js";
 import { Engine } from "./Engine.js";
 import { Entity } from "./Entity.js";
 
@@ -34,7 +35,12 @@ export class Scene {
     }
     update(delta: number) {
         for (let i = 0; i < this.entities.length; i++) {
-            this.entities[i].update(delta);
+            if (this.entities[i].doUpdate) this.entities[i].update(delta);
+        }
+    }
+    draw(draw: DrawLib) {
+        for (let i = 0; i < this.entities.length; i++) {
+            if (this.entities[i].doDraw) this.entities[i].draw(draw);
         }
     }
 }
