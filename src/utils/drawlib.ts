@@ -18,7 +18,7 @@ export class DrawLib {
 
         data = await spritelib.load(url);
 
-        let chars = spritelib.split(data, charWidth + 1, data.height, 0);
+        let chars = spritelib.split(data, charWidth, data.height, 0);
 
         if (chars.length != characters.length) console.error("Characters do not match with image!");
         for (let i = 0; i < characters.length; i++) {
@@ -93,7 +93,7 @@ export class DrawLib {
         }
     }
 
-    public text(x: number, y: number, text: string, c: Color, scale: number = 1) {
+    public text(x: number, y: number, text: string, c: Color, scale: number = 1, leftMargin: number = 1) {
         text = text.toUpperCase();
 
         for (let i = 0, char; i < text.length; i++) {
@@ -101,17 +101,16 @@ export class DrawLib {
             char = this.fontMap[text[i]];
 
             if (char) {
-                // TODO: scale not working properly
-                this.spriteExt(x + i * (char.width + 1) * scale, y, char, scale, { r: (c.r - 128) * 2, g: (c.g - 128) * 2, b: (c.b - 128) * 2 }); // to overwrite color
-            } else this.pixel(x + i * 4, y, c);
+                this.spriteExt(x + i * (char.width + leftMargin) * scale, y, char, scale, { r: (c.r - 128) * 2, g: (c.g - 128) * 2, b: (c.b - 128) * 2 }); // to overwrite color
+            } else this.pixel(x + i * (4 + leftMargin) * scale, y, c);
         }
     }
 
-    public measureText(text: string): number {
+    public measureText(text: string, scale: number = 1, leftMargin: number = 1): number {
         let sum = 0;
         for (let i = 0; i < text.length; i++) {
-            if (text[i] == " " || !this.fontMap[text[i]]) sum += 5;
-            else sum += this.fontMap[text[i]].width;
+            if (text[i] == " " || !this.fontMap[text[i]]) sum += (4 + leftMargin) * scale;
+            else sum += (this.fontMap[text[i]].width + leftMargin) * scale;
         }
         return sum;
     }
