@@ -3,8 +3,8 @@ import { Screen } from "./Screen.js";
 import { Input } from "./Input.js";
 
 import { DrawLib } from "../utils/drawlib.js";
-import { Color } from "../utils/color.js";
-import { Random } from "../utils/random.js";
+import { Color } from "../utils/Color.js";
+import { Random } from "../utils/Random.js";
 import { PhysicLib } from "../utils/physiclib.js";
 
 export class Engine {
@@ -19,10 +19,14 @@ export class Engine {
     public physic: PhysicLib;
 
     public showInfo: boolean = false;
+    public autoScale: boolean = false;
 
     public clearColor: Color = Color.black;
 
     public set activeScene(value: Scene) {
+        // Disable old scene
+        if (this._activeScene.apateInstance) this._activeScene.apateInstance = null;
+
         this._activeScene = value;
         this._activeScene.apateInstance = this;
     }
@@ -36,7 +40,7 @@ export class Engine {
         this.random = new Random();
 
         this.screen = new Screen();
-        this.screen.scale = 8;
+        this.screen.scale = this.screen.maxScale;
 
         this.draw = new DrawLib(this.screen);
         this.input = new Input(this.screen.canvas);
@@ -46,6 +50,8 @@ export class Engine {
         this.draw.loadFont("/res/default_text.png", "ABCDEFGHIJKLMNOPQRSTUVWXYZ.!?:+-*/=()0123456789", 4);
 
         document.body.append(this.screen.canvas);
+
+        window.addEventListener('resize', this.onWindowResize.bind(this));
     }
 
     public run() {
@@ -103,6 +109,9 @@ export class Engine {
 
     public resize(width: number, height: number) {
         this.screen.resize(width, height);
+        if (this.autoScale) {
+            this.screen.scale = this.screen.maxScale;
+        }
     }
 
     public rescale(scale: number) {
@@ -111,5 +120,11 @@ export class Engine {
 
     public get htmlElement(): HTMLElement {
         return this.screen.canvas;
+    }
+
+    private onWindowResize(ev: UIEvent) {
+        if (this.autoScale) {
+            this.screen.scale = this.screen.maxScale;
+        }
     }
 }

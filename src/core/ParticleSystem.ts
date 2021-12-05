@@ -1,4 +1,4 @@
-import { Color } from "../utils/color.js";
+import { Color } from "../utils/Color.js";
 import type { DrawLib } from "../utils/drawlib.js";
 import { Entity } from "./Entity.js";
 
@@ -16,9 +16,9 @@ export class Particle {
 
     constructor(particle?: Particle) {
         if (!particle) particle = {} as any;
-        let k = Object.keys(particle);
-        for (let i = 0; i < k.length; i++) {
-            this[k[i]] = particle[k[i]];
+        let keys = Object.keys(particle);
+        for (let i = 0; i < keys.length; i++) {
+            this[keys[i]] = particle[keys[i]];
         }
     }
 }

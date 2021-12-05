@@ -1,9 +1,9 @@
-
 # Distribution
-dist
+dist/
 
 # Mac OS
 .DS_Store
 
-node_modules
+# NPM
+node_modules/
 package-lock.json

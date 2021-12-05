@@ -48,7 +48,9 @@ export class Entity {
         for (let i = 0; i < newEvents.length; i++) {
             if (this[newEvents[i]] || this.config.allowOwnEvents) {
                 this[newEvents[i]] = this.config.bindThisOnEventAction ? events[newEvents[i]].bind(this) : events[newEvents[i]];
-            } else console.warn("Not allowed to use event " + newEvents[i]);
+            } else {
+                console.warn("Not allowed to use event " + newEvents[i]);
+            }
         }
     }
 

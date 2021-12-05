@@ -1,8 +1,6 @@
 {
     "ignore": ["dist/*"],
-    "watch": [
-        "src"
-    ],
+    "watch": ["src"],
     "ext": "ts",
     "exec": "tsc"
 }

@@ -256,16 +256,6 @@ export class ParticleSystem {
 }
 export var spriteMgr = new SpriteMgr();
 
-interface ParticleSystemProperties {
-    seed?: number;
-    amount?: number;
-    emitDelay?: number;
-    origin?: { x?: number; y?: number; w?: number; h?: number };
-    velocity?: { x?: number; y?: number; randomMinX?: number; randomMinY?: number; randomMaxX?: number; randomMaxY?: number };
-    gravity?: { x?: number; y?: number };
-    lifetime?: number;
-    colors?: { r?: number; g?: number; b?: number }[];
-}
 /**
  * @typedef ParticleSystemProperties
  * @property {number?} seed
@@ -278,3 +268,13 @@ interface ParticleSystemProperties {
  * @property {number?} lifetime
  * @property {{r: number, g: number, b: number}[]?} colors
  */
+interface ParticleSystemProperties {
+    seed?: number;
+    amount?: number;
+    emitDelay?: number;
+    origin?: { x?: number; y?: number; w?: number; h?: number };
+    velocity?: { x?: number; y?: number; randomMinX?: number; randomMinY?: number; randomMaxX?: number; randomMaxY?: number };
+    gravity?: { x?: number; y?: number };
+    lifetime?: number;
+    colors?: { r?: number; g?: number; b?: number }[];
+}

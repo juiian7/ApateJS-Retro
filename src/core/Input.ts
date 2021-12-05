@@ -1,4 +1,4 @@
-import { Button } from "../utils/button.js";
+import { Button } from "../utils/Button.js";
 
 // TODO: Controller handling
 export class Input {

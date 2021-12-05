@@ -1,5 +1,5 @@
 import { Screen } from "../core/Screen";
-import { Color } from "./color.js";
+import { Color } from "./Color.js";
 import { spritelib } from "./spritelib.js";
 
 type Sprite = ImageData;
@@ -78,14 +78,7 @@ export class DrawLib {
             if (sprite.data[i + 3] > 0) {
                 for (dx = 0; dx < scale; dx++) {
                     for (dy = 0; dy < scale; dy++) {
-                        if (color)
-                            this.screen.setPixel(
-                                px + dx + x,
-                                py + dy + y,
-                                (sprite.data[i] + color.r) / 2,
-                                (sprite.data[i + 1] + color.g) / 2,
-                                (sprite.data[i + 2] + color.b) / 2
-                            );
+                        if (color) this.screen.setPixel(px + dx + x, py + dy + y, (sprite.data[i] + color.r) / 2, (sprite.data[i + 1] + color.g) / 2, (sprite.data[i + 2] + color.b) / 2);
                         else this.screen.setPixel(px + dx + x, py + dy + y, sprite.data[i], sprite.data[i + 1], sprite.data[i + 2]);
                     }
                 }
