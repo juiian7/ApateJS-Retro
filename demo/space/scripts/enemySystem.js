@@ -46,8 +46,8 @@ export default class EnemySystem extends ParticleSystem {
     }
 
     kill(p) {
-        for (let i = 0; i < 10; i++) {
-            this.explosionSystem.spawn({ x: p.x, y: p.y, velX: this.apate.random.betweenInt(-1, 1), velY: -1, lifetime: 100, c: Color.red });
+        for (let i = 0; i < 4; i++) {
+            this.explosionSystem.spawn({ x: p.x, y: p.y, velX: this.apate.random.between(-1, 1), velY: -1, lifetime: 300, color: Color.red });
         }
         super.kill(p);
     }

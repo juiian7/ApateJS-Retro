@@ -51,8 +51,8 @@ class Game extends Scene {
                 }
             },
             draw: function (draw) {
-                draw.text(Math.round((128 - apate.draw.measureText("Game Over")) / 2), 60, "Game Over", Color.white);
-                draw.text(Math.round((128 - apate.draw.measureText("Press (R) to restart")) / 2), 75, "Press -R- to restart", Color.white);
+                draw.text(Math.round(64 - apate.draw.measureText("Game Over", 2) / 2), 60, "Game Over", Color.white, 2);
+                draw.text(Math.round(64 - apate.draw.measureText("Press -R- to restart") / 2), 75, "Press -R- to restart", Color.white);
             },
         });
 
