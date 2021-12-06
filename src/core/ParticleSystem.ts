@@ -11,6 +11,8 @@ export class Particle {
     sprite?: Sprite;
     velX: number = 0;
     velY: number = 0;
+    gravityX: number = 0;
+    gravityY: number = 0;
     scale: number = 1;
     lifetime: number = Infinity;
 
@@ -66,6 +68,9 @@ export class ParticleSystem extends Entity {
                 i--;
                 continue;
             }
+
+            this.particles[i].velX += this.particles[i].gravityX * delta * 0.0001;
+            this.particles[i].velY += this.particles[i].gravityY * delta * 0.0001;
 
             if (this.applyDelta) {
                 this.particles[i].x += this.particles[i].velX * delta * 0.05;

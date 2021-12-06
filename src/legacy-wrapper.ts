@@ -247,6 +247,8 @@ export class ParticleSystem {
                 x: random.betweenInt(properties.origin.x, properties.origin.x + properties.origin.w),
                 y: random.betweenInt(properties.origin.y, properties.origin.y + properties.origin.h),
                 color: new Color(properties.colors[0].r, properties.colors[0].g, properties.colors[0].b) ?? Color.magenta,
+                gravityX: properties.gravity.x ?? 0,
+                gravityY: properties.gravity.y ?? 0,
             };
         };
     }
