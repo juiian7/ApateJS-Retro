@@ -15,6 +15,12 @@ class PixelScreen {
     }
 }
 
+type Color_M = { r: number; g: number; b: number };
+
+export function color(r, g, b) {
+    return new Color(r, g, b);
+}
+
 class Screen {
     public pixelScreen: PixelScreen;
     public _apate: Apate_M;
@@ -23,17 +29,20 @@ class Screen {
         this.pixelScreen = new PixelScreen(apate);
         this._apate = apate;
     }
-    drawPixel(x, y, c) {
+    drawPixel(x: number, y: number, c: Color_M) {
         this._apate.draw.pixel(Math.round(x), Math.round(y), c);
     }
-    drawRect(x, y, w, h, c) {
+    drawRect(x: number, y: number, w: number, h: number, c: Color_M) {
         this._apate.draw.rect(Math.round(x), Math.round(y), w, h, c);
     }
-    drawSprite(x, y, spriteObj, scale) {
+    drawSprite(x: number, y: number, spriteObj, scale: number) {
         this._apate.draw.spriteExt(Math.round(x), Math.round(y), spriteObj, scale, null);
     }
-    drawText(x, y, text, c, options) {
-        this._apate.draw.text(Math.round(x), Math.round(y), text, c, options?.scale ?? 1);
+    drawText(x: number, y: number, text: string, c: Color_M, options) {
+        let lines = text.split("\n");
+        for (let i = 0; i < lines.length; i++) {
+            this._apate.draw.text(Math.round(x), Math.round(y + i * (5 + (options?.topSpace ?? 1))), lines[i], c, Math.round(options?.scale ?? 1));
+        }
     }
 }
 
@@ -74,12 +83,17 @@ export default class Apate {
         this._apate["test"] = "ok";
         this.screen = new Screen(this._apate);
         this.activeScene = new Scene();
+        this.autoScale = true;
     }
 
     public autoPauseOnLeave: boolean = true;
 
     public setParentElement(el: HTMLElement) {
         el.append(this._apate.htmlElement);
+    }
+
+    public set autoScale(val) {
+        this._apate.autoScale = val;
     }
 
     public set clearColor(val: Color) {
@@ -141,14 +155,12 @@ export default class Apate {
     public isButtonPressed(name) {
         return this._apate.input.isButtonDown(name.toLowerCase());
     }
-    public loadObjFromBrowser(name) {
-        return {};
+    public loadObjFromBrowser(name: string) {
+        return window.localStorage.getItem(name);
     }
-    public saveObjToBrowser(name, obj) {}
-}
-
-export function color(r, g, b) {
-    return new Color(r, g, b);
+    public saveObjToBrowser(name: string, obj) {
+        window.localStorage.setItem(name, obj);
+    }
 }
 
 class Scene_M extends Scene_O {

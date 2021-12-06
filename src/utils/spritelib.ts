@@ -9,6 +9,7 @@ class SpriteLib {
 
     async load(url: string): Promise<Sprite> {
         let img = new Image();
+        img.crossOrigin = "Anonymous";
 
         try {
             await new Promise((res, rej) => {

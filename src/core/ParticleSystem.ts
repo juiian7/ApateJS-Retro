@@ -81,11 +81,15 @@ export class ParticleSystem extends Entity {
 
     draw(draw: DrawLib) {
         for (let i = 0; i < this.particles.length; i++) {
-            if (this.particles[i].sprite && this.particles[i].color)
+            if (this.particles[i].sprite && this.particles[i].color) {
                 draw.spriteExt(Math.round(this.particles[i].x), Math.round(this.particles[i].y), this.particles[i].sprite, 1, this.particles[i].color);
-            else if (this.particles[i].sprite) draw.sprite(Math.round(this.particles[i].x), Math.round(this.particles[i].y), this.particles[i].sprite);
-            else if (this.particles[i].color) draw.pixel(Math.round(this.particles[i].x), Math.round(this.particles[i].y), this.particles[i].color);
-            else draw.pixel(Math.round(this.particles[i].x), Math.round(this.particles[i].y), Color.magenta);
+            } else if (this.particles[i].sprite) {
+                draw.sprite(Math.round(this.particles[i].x), Math.round(this.particles[i].y), this.particles[i].sprite);
+            } else if (this.particles[i].color) {
+                draw.pixel(Math.round(this.particles[i].x), Math.round(this.particles[i].y), this.particles[i].color);
+            } else {
+                draw.pixel(Math.round(this.particles[i].x), Math.round(this.particles[i].y), Color.magenta);
+            }
         }
     }
 

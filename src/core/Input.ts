@@ -19,19 +19,18 @@ export class Input {
         }
     }
 
-    public registerButton(btn: Button) {
-        this.registeredButtons[btn.name] = btn;
-    }
-
     private onKeyDown(ev: KeyboardEvent) {
         this.pressedKeys.push(ev.code);
     }
     private onKeyUp(ev: KeyboardEvent) {
         this.pressedKeys = this.pressedKeys.filter((code) => code != ev.code);
     }
-
     private onMouseDown(ev: MouseEvent) {}
     private onMouseUp(ev: MouseEvent) {}
+
+    public registerButton(btn: Button) {
+        this.registeredButtons[btn.name] = btn;
+    }
 
     public isButtonDown(btn: Button | string): boolean {
         if (typeof btn == "string") {
@@ -49,6 +48,7 @@ export class Input {
 
         return false;
     }
+
     public getAxis(): { v: number; h: number } {
         let axis = { v: 0, h: 0 };
 

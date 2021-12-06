@@ -39,6 +39,7 @@ export class DrawLib {
     public pixel(x: number, y: number, c: Color) {
         this.screen.setPixel(x, y, c.r, c.g, c.b);
     }
+
     public rect(x: number, y: number, w: number, h: number, c: Color) {
         for (let i = 0; i < w; i++) {
             for (let j = 0; j < h; j++) {
@@ -46,6 +47,7 @@ export class DrawLib {
             }
         }
     }
+
     public sprite(x: number, y: number, sprite: Sprite) {
         if (!sprite) {
             console.warn("Sprite not ready! skipping draw");
@@ -62,6 +64,7 @@ export class DrawLib {
             }
         }
     }
+    
     public spriteExt(x: number, y: number, sprite: Sprite, scale: number, color?: Color) {
         if (!sprite) {
             console.warn("Sprite not ready! skipping draw");

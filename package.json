@@ -7,6 +7,12 @@
     "build": "tsc && rollup dist/apate.js --file dist/mini.js",
     "dev": "nodemon --config nodemon.json"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/juiian7/ApateJS-Retro.git"
+  },
+  "author": "juiian7",
+  "license": "GPL-3.0",
   "dependencies": {
     "typescript": "4.4.4",
     "rollup": "2.59.0",

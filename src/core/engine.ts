@@ -8,9 +8,8 @@ import { Random } from "../utils/Random.js";
 import { PhysicLib } from "../utils/physiclib.js";
 
 export class Engine {
-    public isCursorVisible: boolean = false;
     private _activeScene: Scene = new Scene();
-    private lastFrame: boolean = false;
+    private _lastFrame: boolean = false;
     protected screen: Screen;
 
     public draw: DrawLib;
@@ -18,6 +17,7 @@ export class Engine {
     public random: Random;
     public physic: PhysicLib;
 
+    public isCursorVisible: boolean = false;
     public showInfo: boolean = false;
     public autoScale: boolean = false;
 
@@ -37,25 +37,27 @@ export class Engine {
     constructor() {
         this._activeScene.apateInstance = this;
 
-        this.random = new Random();
-
         this.screen = new Screen();
         this.screen.scale = this.screen.maxScale;
 
         this.draw = new DrawLib(this.screen);
         this.input = new Input(this.screen.canvas);
-
+        this.random = new Random();
         this.physic = new PhysicLib();
 
-        this.draw.loadFont("/res/default_text.png", "ABCDEFGHIJKLMNOPQRSTUVWXYZ.!?:+-*/=()0123456789", 4);
+        this.draw.loadFont(
+            "https://raw.githubusercontent.com/juiian7/ApateJS-Retro/4d178bfea79a0ef601130d7d0c6a69c473e7e1ae/res/default_text.png",
+            "ABCDEFGHIJKLMNOPQRSTUVWXYZ.!?:+-*/=()0123456789",
+            4
+        );
 
         document.body.append(this.screen.canvas);
 
-        window.addEventListener('resize', this.onWindowResize.bind(this));
+        window.addEventListener("resize", this.onWindowResize.bind(this));
     }
 
     public run() {
-        this.lastFrame = false;
+        this._lastFrame = false;
 
         var lastTime = new Date().getTime();
         var time = 0;
@@ -93,7 +95,7 @@ export class Engine {
             lastTime = time;
             frameCounter++;
 
-            if (!this.lastFrame) window.requestAnimationFrame(loop);
+            if (!this._lastFrame) window.requestAnimationFrame(loop);
         };
 
         window.requestAnimationFrame(loop);
@@ -104,7 +106,7 @@ export class Engine {
     }
 
     public stop() {
-        this.lastFrame = true;
+        this._lastFrame = true;
     }
 
     public resize(width: number, height: number) {
