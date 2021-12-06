@@ -5,6 +5,7 @@ export class Button {
     static right = new Button("right", ["KeyD", "ArrowRight"]);
     static action1 = new Button("action1", ["KeyZ", "KeyN", "KeyC", "Space"]);
     static action2 = new Button("action2", ["KeyX", "KeyM", "KeyV"]);
+    static cancel = new Button("cancel", ["Backspace", "ESC"]);
 
     name: string;
     keybinds: string[];

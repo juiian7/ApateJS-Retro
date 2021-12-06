@@ -14,7 +14,7 @@ export class Input {
         rootElement.addEventListener("mousedown", this.onMouseDown.bind(this));
         rootElement.addEventListener("mouseup", this.onMouseUp.bind(this));
 
-        for (const btn of [Button.up, Button.down, Button.left, Button.right, Button.action1, Button.action2]) {
+        for (const btn of [Button.up, Button.down, Button.left, Button.right, Button.action1, Button.action2, Button.cancel]) {
             this.registerButton(btn);
         }
     }
