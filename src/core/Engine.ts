@@ -41,7 +41,7 @@ export class Engine {
         this.screen.scale = this.screen.maxScale;
 
         this.draw = new DrawLib(this.screen);
-        this.input = new Input(this.screen.canvas);
+        this.input = new Input(this.screen.canvas, this.screen);
         this.random = new Random();
         this.physic = new PhysicLib();
 
