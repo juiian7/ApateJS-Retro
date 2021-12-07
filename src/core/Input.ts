@@ -22,6 +22,8 @@ export class Input {
 
     private registeredButtons: RegisteredButtons = { up: [], down: [] };
 
+    private controllers: Gamepad[] = [];
+
     private _screen: Screen;
     private _rootElement: HTMLElement;
 
@@ -40,9 +42,25 @@ export class Input {
         rootElement.addEventListener("touchend", this.onTouchEnd.bind(this));
         rootElement.addEventListener("touchmove", this.onTouchMove.bind(this));
 
+        window.addEventListener("gamepadconnected", this.onGamepadConnected.bind(this));
+        window.addEventListener("gamepaddisconnected", this.onGamepadDisconnected.bind(this));
+
         for (const btn of [Button.up, Button.down, Button.left, Button.right, Button.action1, Button.action2, Button.cancel]) {
             this.addButton(btn);
         }
+    }
+
+    private onGamepadConnected(ev: GamepadEvent) {
+        console.log("Controller connected! Name: " + ev.gamepad.id);
+        this.controllers = navigator.getGamepads();
+        console.log(this.controllers);
+
+        console.log(ev);
+    }
+
+    private onGamepadDisconnected(ev: GamepadEvent) {
+        console.log("Controller disconnected!");
+        this.controllers = navigator.getGamepads();
     }
 
     private onKeyDown(ev: KeyboardEvent) {
@@ -128,11 +146,28 @@ export class Input {
             if (this.pressedKeys.includes(btn.keybinds[i])) return true;
         }
 
+        if (btn.controllerBind != null && this.controllers.length > 0) {
+            this.controllers = navigator.getGamepads(); // need to call getGamepads to refresh list
+
+            for (let i = 0; i < this.controllers.length; i++) {
+                if (this.controllers[i].buttons[btn.controllerBind].pressed) {
+                    return true;
+                }
+            }
+        }
+
         return false;
     }
 
     public getAxis(): { v: number; h: number } {
         let axis = { v: 0, h: 0 };
+
+        if (this.controllers.length > 0) {
+            axis.h = navigator.getGamepads()[0].axes[0];
+            axis.v = navigator.getGamepads()[0].axes[1] * -1;
+
+            if (axis.h != 0 || axis.v != 0) return axis;
+        }
 
         if (this.isButtonDown(Button.up)) axis.v += 1;
         if (this.isButtonDown(Button.down)) axis.v -= 1;
