@@ -12,8 +12,8 @@ export default apate;
 apate.showInfo = true;
 apate.clearColor = new Color(12, 10, 30);
 
-let btnR = new Button("restart", ["KeyR"]);
-apate.input.registerButton(btnR);
+let btnR = new Button("restart", ["KeyR"], 2);
+apate.input.addButton(btnR);
 
 class Game extends Scene {
     constructor() {
