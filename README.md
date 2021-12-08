@@ -57,9 +57,9 @@ There are a few events called, which will help to run your game:
 | `init` | Once an entity is added to a scene | - |
 | `update` | Called every frame | delta: `number` (Time since last call) |
 | `draw` | Called every frame | drawlib (used to draw to screen) |
-| `destroy` | - Not automaticly called - | -
+| `destroy` | - Not automaticly called - | -
 
-You can register to the events like this:
+Register events like this:
 
 ```js
 entity.set({
@@ -81,11 +81,11 @@ entity.update = function() { ... }
 
 **NOTE:**
 
-Normaly your function gets bound so you can use `this.` to access all associated properties. When you set it directly you may bind this youself.
+Normaly the functions get bound. Use `this.` to access all associated properties. When setting it directly you may bind `this` youself.
 
-You may also add events with your names like `physicUpdate`. Make sure `allowOwnEvents` is set to `true` in when the constructor is called.
+New events with own names like `physicUpdate` can also be created. Make sure `allowOwnEvents` is set to `true` in when the constructor is called.
 
-When an entity is executed by apate throught a scene you can access `this.apate` to get the current running instance.
+When an entity is executed by apate throught a scene, access `this.apate` to get the current running instance.
 
 ```js
 var entity = new Entity({ allowOwnEvents: true });
@@ -111,14 +111,14 @@ hwEntity.set({ draw: drawHelloWorld });
 // add to the active scene
 apate.activeScene.init(hwEntity);
 
-// or create your own scene
+// or create own scenes
 let scene = new Scene();
 scene.init(hwEntity);
 
 apate.activeScene = scene;
 ```
 
-As mentioned before, you can also extend the Enity class to make it more comfortable to write entities:
+As mentioned before, the Enity class can be extended to make it more comfortable to write entities:
 
 ```js
 class HelloWorld extends Entity {
@@ -185,14 +185,14 @@ if (apate.input.isButtonPressed(btn)) {
     // one of the jump keys is pressed
 }
 
-// when button is registered you can use the button name to check for input
-apate.input.registerButton(btn);
+// when button is registered use the button name to check for input
+apate.input.addButton(btn);
 
 if (apate.input.isButtonPressed("jump")) {
 }
 ```
 
-### Controller support (not implpemented yet)
+### Controller support (experimental)
 
 ```
 The primary joystick is mapped to the up, down, left and right buttons
@@ -205,7 +205,7 @@ cancel is mapped to the controllers second button (PS: O, XBox: B)
 
 The ParticleSystem is an Enitiy object which handles multiple entity simulations.
 
-You can control it by overwriting the `generateParticle` function.
+Control particles by overwriting the `generateParticle` function.
 
 ```js
 import { Apate, ParticleSystem, Color } from "../../src/apate.js";
