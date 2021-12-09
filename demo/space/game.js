@@ -1,4 +1,4 @@
-import { Apate, Button, Color, Entity, Scene } from "../../dist/apate.js";
+import { Apate, Button, Color, Entity, Scene, spritelib } from "../../dist/apate.js";
 
 import EnemySystem from "./scripts/enemySystem.js";
 import Ship from "./scripts/ship.js";
@@ -6,7 +6,11 @@ import StarMap from "./scripts/starMap.js";
 
 let apate = new Apate();
 
-export var storage = {};
+export var storage = {
+    shipSprite: spritelib.loadSync(document.querySelector("#ship")),
+    bulletSprite: spritelib.loadSync(document.querySelector("#bullet")),
+    enemyFrames: spritelib.split(spritelib.loadSync(document.querySelector("#enemy")), 8, 8, 0),
+};
 export default apate;
 
 apate.showInfo = true;

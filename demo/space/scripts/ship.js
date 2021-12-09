@@ -1,4 +1,4 @@
-import { Color, Entity, Particle, ParticleSystem, spritelib } from "../../../dist/apate.js";
+import { Color, Entity, Particle, ParticleSystem } from "../../../dist/apate.js";
 import apate, { storage } from "../game.js";
 import EnemySystem from "./enemySystem.js";
 import StarMap from "./starMap.js";
@@ -15,6 +15,9 @@ export default class Ship extends Entity {
         super({ bindThisOnEventAction: false, storage, allowOwnEvents: true });
         storage.shipX = 60;
         storage.shipY = 100;
+
+        this.shipSprite = storage.shipSprite;
+        this.bulletSprite = storage.bulletSprite;
 
         this.starMap = starMap;
         this.enemySystem = enemySystem;
@@ -38,9 +41,6 @@ export default class Ship extends Entity {
     }
 
     async init() {
-        this.shipSprite = spritelib.loadSync(document.querySelector("#ship"));
-        this.bulletSprite = spritelib.loadSync(document.querySelector("#bullet"));
-
         this.apate.activeScene.add(bulletSystem);
     }
 
