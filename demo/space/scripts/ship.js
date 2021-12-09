@@ -56,7 +56,7 @@ export default class Ship extends Entity {
         if (this.nextShoot < 0 && this.apate.input.isButtonDown("action1")) {
             this.nextShoot = 1000 / this.shootsPerSec;
 
-            bulletSystem.spawn(new Particle({ x: storage.shipX, y: storage.shipY - 6, sprite: this.bulletSprite, velY: -4, color: Color.green }));
+            bulletSystem.spawn(new Particle({ x: storage.shipX, y: storage.shipY - 6, sprite: this.bulletSprite, velY: -4, color: Color.green, lifetime: 1000 }));
         }
 
         apate.draw.sprite(Math.round(storage.shipX), Math.round(storage.shipY), this.shipSprite);
