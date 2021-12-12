@@ -12,6 +12,7 @@ export class Engine {
     private _activeScene: Scene = new Scene();
     private _lastFrame: boolean = false;
     private _cursor: { img?: ImageData; x: number; y: number; scale: number } = { x: 0, y: 0, scale: 1 };
+    private _camera: { x: number; y: number } = { x: 0, y: 0 };
 
     protected screen: Screen;
 
@@ -112,14 +113,17 @@ export class Engine {
 
             this.screen.clear(this.clearColor.r, this.clearColor.g, this.clearColor.b);
 
+            this.draw.setOffset(this._camera.x, this._camera.y);
+
             // update
             this._activeScene.update(delta);
             this.physic.checkAllCollisions();
 
             // draw
             this._activeScene.draw(this.draw);
-            if (this.showInfo) this.draw.text(1, 1, "FPS:" + lastFrames, Color.white);
 
+            this.draw.setOffset(0, 0);
+            if (this.showInfo) this.draw.text(1, 1, "FPS:" + lastFrames, Color.white);
             if (this.drawCursor) {
                 this.draw.fragment(this.input.mousePos.x, this.input.mousePos.y, this._cursor.img, calcCursorColor, this._cursor.scale);
             }
@@ -137,6 +141,11 @@ export class Engine {
 
     public clear() {
         this.screen.clear(this.clearColor.r, this.clearColor.g, this.clearColor.b);
+    }
+
+    public camera(x: number, y: number) {
+        this._camera.x = x;
+        this._camera.y = y;
     }
 
     public stop() {

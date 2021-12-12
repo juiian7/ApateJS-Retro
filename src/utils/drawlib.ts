@@ -13,6 +13,14 @@ export class DrawLib {
         this.screen = screen;
     }
 
+    private _cameraOffsetX: number = 0;
+    private _cameraOffsetY: number = 0;
+
+    public setOffset(x: number, y: number) {
+        this._cameraOffsetX = x;
+        this._cameraOffsetY = y;
+    }
+
     public async loadFont(url: string, characters: string, charWidth: number) {
         let data: Sprite;
 
@@ -37,13 +45,13 @@ export class DrawLib {
     }
 
     public pixel(x: number, y: number, c: Color) {
-        this.screen.setPixel(x, y, c.r, c.g, c.b);
+        this.screen.setPixel(x + this._cameraOffsetX, y + this._cameraOffsetY, c.r, c.g, c.b);
     }
 
     public rect(x: number, y: number, w: number, h: number, c: Color) {
         for (let i = 0; i < w; i++) {
             for (let j = 0; j < h; j++) {
-                this.screen.setPixel(i + x, j + y, c.r, c.g, c.b);
+                this.screen.setPixel(i + x + this._cameraOffsetX, j + y + this._cameraOffsetY, c.r, c.g, c.b);
             }
         }
     }
@@ -53,6 +61,9 @@ export class DrawLib {
             console.warn("Sprite not ready! skipping draw");
             return;
         }
+
+        x += this._cameraOffsetX;
+        y += this._cameraOffsetY;
 
         for (let i = 0, px = 0, py = 0; i < sprite.data.length; i += 4, px++) {
             if (px >= sprite.width) {
@@ -71,6 +82,9 @@ export class DrawLib {
             return;
         }
         scale = Math.round(scale);
+
+        x += this._cameraOffsetX;
+        y += this._cameraOffsetY;
 
         let i, px, py, dx, dy;
         for (i = 0, px = 0, py = 0; i < sprite.data.length; i += 4, px += scale) {
@@ -91,6 +105,9 @@ export class DrawLib {
 
     public text(x: number, y: number, text: string, c: Color, scale: number = 1, leftMargin: number = 1) {
         text = text.toUpperCase();
+
+        x += this._cameraOffsetX;
+        y += this._cameraOffsetY;
 
         for (let i = 0, char; i < text.length; i++) {
             if (text[i] == " ") continue;
@@ -117,6 +134,9 @@ export class DrawLib {
             return;
         }
         scale = Math.round(scale);
+
+        x += this._cameraOffsetX;
+        y += this._cameraOffsetY;
 
         let i, px, py, dx, dy;
         for (i = 0, px = 0, py = 0; i < sprite.data.length; i += 4, px += scale) {
