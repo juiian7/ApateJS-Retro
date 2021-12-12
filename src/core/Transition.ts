@@ -21,8 +21,6 @@ export class Transition extends Entity {
         this.index -= delta;
 
         this.progress = this.index / this.duration;
-        console.log(this.progress);
-
         if (this.type == "start") this.progress = 1 - this.progress;
 
         if (this.index < 0) this.done();
