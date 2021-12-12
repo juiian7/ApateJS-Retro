@@ -64,7 +64,7 @@ export class DrawLib {
             }
         }
     }
-    
+
     public spriteExt(x: number, y: number, sprite: Sprite, scale: number, color?: Color) {
         if (!sprite) {
             console.warn("Sprite not ready! skipping draw");
@@ -109,5 +109,29 @@ export class DrawLib {
             else sum += (this.fontMap[text[i]].width + leftMargin) * scale;
         }
         return sum;
+    }
+
+    public fragment(x: number, y: number, sprite: Sprite, calc: (pixels: Uint8Array, ndx: number) => Color, scale: number = 1) {
+        if (!sprite) {
+            console.warn("Sprite not ready! skipping draw");
+            return;
+        }
+        scale = Math.round(scale);
+
+        let i, px, py, dx, dy;
+        for (i = 0, px = 0, py = 0; i < sprite.data.length; i += 4, px += scale) {
+            if (px >= sprite.width * scale) {
+                px = 0;
+                py += scale;
+            }
+            if (sprite.data[i + 3] > 0) {
+                for (dx = 0; dx < scale; dx++) {
+                    for (dy = 0; dy < scale; dy++) {
+                        let color = calc(this.screen.pixelBuffer, (this.screen.width * (py + dy + y) + (px + dx + x)) * 3);
+                        this.screen.setPixel(px + dx + x, py + dy + y, color.r, color.g, color.b);
+                    }
+                }
+            }
+        }
     }
 }
