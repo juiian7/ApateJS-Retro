@@ -144,7 +144,7 @@ export class Engine {
     }
 
     public camera(x: number, y: number) {
-        this._camera.x = x;
+        this._camera.x = x * -1;
         this._camera.y = y;
     }
 
