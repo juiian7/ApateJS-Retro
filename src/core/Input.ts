@@ -15,7 +15,7 @@ interface RegisteredButtons {
 // TODO: Controller handling
 export class Input {
     private pressedKeys: string[] = [];
-    public isMousePressed: boolean = true;
+    public isMousePressed: boolean = false;
     public mousePos = { x: 0, y: 0 };
 
     private buttons: { [name: string]: Button } = {};

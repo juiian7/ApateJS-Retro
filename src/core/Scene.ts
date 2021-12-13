@@ -19,6 +19,10 @@ export class Scene {
         }
     }
 
+    get apateInstance() {
+        return this._apateInstance;
+    }
+
     constructor(transition?: Transition, apateInstace?: Engine) {
         this._transition = transition;
         this._apateInstance = apateInstace;
