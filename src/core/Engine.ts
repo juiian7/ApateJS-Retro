@@ -111,6 +111,14 @@ export class Engine {
                 frameCounter = 0;
             }
 
+            if (delta > 400) {
+                console.info("Skipping frame");
+                window.requestAnimationFrame(loop);
+
+                lastTime = time;
+                return;
+            }
+
             this.screen.clear(this.clearColor.r, this.clearColor.g, this.clearColor.b);
 
             this.draw.setOffset(this._camera.x, this._camera.y);
