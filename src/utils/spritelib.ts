@@ -19,7 +19,7 @@ class SpriteLib {
             });
         } catch {
             console.error("Couldn't load resource: " + url);
-            return { width: 1, height: 1, data: new Uint8ClampedArray([255, 0, 255, 255]) };
+            return new ImageData(new Uint8ClampedArray([255, 0, 255, 255]), 1, 1);
         }
 
         return this.loadSync(img);
@@ -46,10 +46,30 @@ class SpriteLib {
                     part.push(sprite.data[ndx], sprite.data[ndx + 1], sprite.data[ndx + 2], sprite.data[ndx + 3]);
                 }
             }
-            sprites.push({ data: new Uint8ClampedArray(part), width, height });
+
+            sprites.push(new ImageData(new Uint8ClampedArray(part), width, height));
         }
 
         return sprites;
+    }
+
+    filpH(sprite: Sprite): Sprite {
+        //TODO: Not working fix please :)
+        this.canvas.width = sprite.width;
+        this.canvas.height = sprite.height;
+        let ctx = this.canvas.getContext("2d");
+
+        ctx.putImageData(sprite, 0, 0);
+
+        let img = new Image();
+        img.src = this.canvas.toDataURL("image/png");
+
+        ctx.scale(-1, 1);
+        ctx.drawImage(img, 0, 0);
+
+        let flippedSprite = ctx.getImageData(0, 0, sprite.width, sprite.height);
+
+        return flippedSprite;
     }
 }
 
