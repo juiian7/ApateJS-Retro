@@ -242,13 +242,13 @@ export class ParticleSystem {
             return {
                 lifetime: properties.lifetime ?? Infinity,
                 scale: 1,
-                velX: properties.velocity.x ?? 0,
-                velY: properties.velocity.y ?? 0,
+                velX: properties.velocity?.x ?? 0,
+                velY: properties.velocity?.y ?? 0,
                 x: random.betweenInt(properties.origin.x, properties.origin.x + properties.origin.w),
                 y: random.betweenInt(properties.origin.y, properties.origin.y + properties.origin.h),
                 color: new Color(properties.colors[0].r, properties.colors[0].g, properties.colors[0].b) ?? Color.magenta,
-                gravityX: properties.gravity.x ?? 0,
-                gravityY: properties.gravity.y ?? 0,
+                gravityX: properties.gravity?.x ?? 0,
+                gravityY: properties.gravity?.y ?? 0,
             };
         };
     }
