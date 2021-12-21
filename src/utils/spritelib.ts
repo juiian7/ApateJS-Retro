@@ -53,23 +53,24 @@ class SpriteLib {
         return sprites;
     }
 
-    filpH(sprite: Sprite): Sprite {
-        //TODO: Not working fix please :)
+    filp(sprite: Sprite, horizontal: boolean = true, vertical: boolean = false): Sprite {
         this.canvas.width = sprite.width;
         this.canvas.height = sprite.height;
         let ctx = this.canvas.getContext("2d");
 
         ctx.putImageData(sprite, 0, 0);
 
-        let img = new Image();
-        img.src = this.canvas.toDataURL("image/png");
+        let tmpC = document.createElement("canvas");
+        tmpC.width = this.canvas.width;
+        tmpC.height = this.canvas.height;
+        let tmpCtx = tmpC.getContext("2d");
 
-        ctx.scale(-1, 1);
-        ctx.drawImage(img, 0, 0);
+        tmpCtx.translate(horizontal ? sprite.width : 0, vertical ? sprite.height : 0);
+        tmpCtx.scale(horizontal ? -1 : 1, vertical ? -1 : 1);
+        tmpCtx.drawImage(this.canvas, 0, 0);
+        tmpCtx.setTransform(1, 0, 0, 1, 0, 0);
 
-        let flippedSprite = ctx.getImageData(0, 0, sprite.width, sprite.height);
-
-        return flippedSprite;
+        return tmpCtx.getImageData(0, 0, sprite.width, sprite.height);
     }
 }
 
