@@ -3,8 +3,8 @@ import { Screen } from "./Screen.js";
 import { Input } from "./Input.js";
 
 import { DrawLib } from "../utils/drawlib.js";
-import { Color } from "../utils/Color.js";
-import { Random } from "../utils/Random.js";
+import { Color } from "../utils/color.js";
+import { Random } from "../utils/random.js";
 import { PhysicLib } from "../utils/physiclib.js";
 import { spritelib } from "../utils/spritelib.js";
 

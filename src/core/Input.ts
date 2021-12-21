@@ -1,4 +1,4 @@
-import { Button } from "../utils/Button.js";
+import { Button } from "../utils/button.js";
 import { Screen } from "./Screen.js";
 
 interface RegisteredButtons {

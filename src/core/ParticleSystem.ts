@@ -1,4 +1,4 @@
-import { Color } from "../utils/Color.js";
+import { Color } from "../utils/color.js";
 import type { DrawLib } from "../utils/drawlib.js";
 import { Entity } from "./Entity.js";
 
