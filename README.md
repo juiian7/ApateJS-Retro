@@ -6,8 +6,8 @@ A simple 2D retro game engine which runs directly in your browser.
 
 |                                                                                                           | Author                                | Role | Links                                                                            |
 | --------------------------------------------------------------------------------------------------------- | :------------------------------------ | :--- | :------------------------------------------------------------------------------- |
-| <img src="https://avatars3.githubusercontent.com/u/44403676" alt="ZupaJul Avatar" width="32" height="32"> | [ZupaJul](https://github.com/juiian7) | ...  | [Contributions](https://github.com/juiian7/ApateJS-Retro/commits?author=juiian7) |
-| <img src="https://avatars3.githubusercontent.com/u/94066019" alt="l1ino Avatar" width="32" height="32">   | [l1ino](https://github.com/l1ino)     | ...  | [Contributions](https://github.com/juiian7/ApateJS-Retro/commits?author=l1ino)   |
+| <img src="https://avatars3.githubusercontent.com/u/44403676" alt="ZupaJul Avatar" width="32" height="32"> | [ZupaJul](https://github.com/juiian7) | Project Lead  | [Contributions](https://github.com/juiian7/ApateJS-Retro/commits?author=juiian7) |
+| <img src="https://avatars3.githubusercontent.com/u/94066019" alt="l1ino Avatar" width="32" height="32">   | [l1ino](https://github.com/l1ino)     | Developer  | [Contributions](https://github.com/juiian7/ApateJS-Retro/commits?author=l1ino)   |
 
 ## Usage
 

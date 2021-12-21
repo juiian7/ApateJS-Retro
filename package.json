@@ -1,8 +1,8 @@
 {
   "name": "apatejs-retro",
   "version": "1.0.0",
-  "description": "",
-  "main": "",
+  "description": "A simple 2D retro game engine which runs directly in your browser",
+  "main": "dist/apate.js",
   "scripts": {
     "build": "tsc && rollup dist/apate.js --file dist/mini.js",
     "dev": "nodemon --config nodemon.json"
@@ -15,7 +15,7 @@
   "license": "GPL-3.0",
   "dependencies": {
     "nodemon": "^2.0.15",
-    "rollup": "2.59.0",
+    "rollup": "^2.61.1",
     "typescript": "4.4.4"
   },
   "prettier": {
