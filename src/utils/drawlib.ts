@@ -1,5 +1,5 @@
 import { Screen } from "../core/Screen";
-import { Color } from "./Color.js";
+import { Color } from "./color.js";
 import { spritelib } from "./spritelib.js";
 
 type Sprite = ImageData;
