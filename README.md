@@ -4,10 +4,10 @@ A simple 2D retro game engine which runs directly in your browser.
 
 ## Developers
 
-|                                                                                                           | Author                                | Role | Links                                                                            |
-| --------------------------------------------------------------------------------------------------------- | :------------------------------------ | :--- | :------------------------------------------------------------------------------- |
-| <img src="https://avatars3.githubusercontent.com/u/44403676" alt="ZupaJul Avatar" width="32" height="32"> | [ZupaJul](https://github.com/juiian7) | Project Lead  | [Contributions](https://github.com/juiian7/ApateJS-Retro/commits?author=juiian7) |
-| <img src="https://avatars3.githubusercontent.com/u/94066019" alt="l1ino Avatar" width="32" height="32">   | [l1ino](https://github.com/l1ino)     | Developer  | [Contributions](https://github.com/juiian7/ApateJS-Retro/commits?author=l1ino)   |
+|                                                                                                           | Author                                | Role         | Links                                                                            |
+| --------------------------------------------------------------------------------------------------------- | :------------------------------------ | :----------- | :------------------------------------------------------------------------------- |
+| <img src="https://avatars3.githubusercontent.com/u/44403676" alt="ZupaJul Avatar" width="32" height="32"> | [ZupaJul](https://github.com/juiian7) | Project Lead | [Contributions](https://github.com/juiian7/ApateJS-Retro/commits?author=juiian7) |
+| <img src="https://avatars3.githubusercontent.com/u/94066019" alt="l1ino Avatar" width="32" height="32">   | [l1ino](https://github.com/l1ino)     | Developer    | [Contributions](https://github.com/juiian7/ApateJS-Retro/commits?author=l1ino)   |
 
 ## Usage
 
@@ -208,7 +208,7 @@ The ParticleSystem is an Enitiy object which handles multiple entity simulations
 Control particles by overwriting the `generateParticle` function.
 
 ```js
-import { Apate, ParticleSystem, Color } from "../../src/apate.js";
+import { Apate, ParticleSystem, Color } from "./apate.js";
 
 var apate = new Apate();
 apate.run();
