@@ -176,10 +176,12 @@ if (apate.input.isButtonPressed("action1")) {
     // one of the action1 keys is pressed
 }
 
-// TODO: cannot add/modify the key binds for an existing button
+// add/modify the key binds for an existing button
+Button.action1.removeKeybind("KeyN");
+Button.action1.addKeybind("KeyB");
 
-// new buttons
-var btn = new Button("jump", ["Space", "ArrowUp"]);
+// new button (name: "jump", keybinds: "Space" and "ArrowUp", optional controller binds: 0)
+var btn = new Button("jump", ["Space", "ArrowUp"], 0);
 
 if (apate.input.isButtonPressed(btn)) {
     // one of the jump keys is pressed
@@ -189,6 +191,26 @@ if (apate.input.isButtonPressed(btn)) {
 apate.input.addButton(btn);
 
 if (apate.input.isButtonPressed("jump")) {
+}
+
+apate.input.on(btn, "down", () => {
+    // button "jump" got triggerd
+});
+
+// get horizontal and vertical axis (mapped to keys ("up","down","left", "right") and controller stick axis)
+let axis = apate.input.getAxis();
+player.x += axis.h;
+```
+
+### Mouse and Touch
+
+```js
+apate.input.on("mouse", "down", () => {
+    console.log("Mouse down or Touch start on:", apate.input.mousePos);
+});
+
+if (apate.input.isMousePressed) {
+    apate.draw.pixel(apate.input.mousePos.x, apate.input.mousePos.y, Color.agua);
 }
 ```
 
