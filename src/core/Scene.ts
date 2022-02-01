@@ -63,7 +63,6 @@ export class Scene {
                 this._apateInstance.activeScene.remove(this._apateInstance.activeScene._transition);
             }
 
-            this.onLoad();
             this._apateInstance.activeScene = this;
 
             if (this._transition) {

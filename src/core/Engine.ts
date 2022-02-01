@@ -28,11 +28,10 @@ export class Engine {
     public clearColor: Color = Color.black;
 
     public set activeScene(value: Scene) {
-        // Disable old scene
-        if (this._activeScene.apateInstance) this._activeScene.apateInstance = null;
-
         this._activeScene = value;
         this._activeScene.apateInstance = this;
+
+        this._activeScene.onLoad();
     }
     public get activeScene(): Scene {
         return this._activeScene;

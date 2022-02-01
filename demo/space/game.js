@@ -4,7 +4,7 @@ import EnemySystem from "./scripts/enemySystem.js";
 import Ship from "./scripts/ship.js";
 import StarMap from "./scripts/starMap.js";
 
-let apate = new Apate();
+const apate = new Apate();
 
 export var storage = {
     shipSprite: spritelib.loadSync(document.querySelector("#ship")),
@@ -29,7 +29,9 @@ transition.set({
 class Game extends Scene {
     constructor() {
         super(transition, apate);
+    }
 
+    onLoad() {
         this.isGameOver = false;
         this.starMap = new StarMap();
         this.enemySystem = new EnemySystem();
@@ -72,8 +74,8 @@ class Game extends Scene {
     }
 }
 
-function restart() {
-    new Game().load();
+async function restart() {
+    await new Game().load();
 }
 restart();
 
