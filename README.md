@@ -253,3 +253,24 @@ apate.activeScene.add(waterfall);
 
 Don't overwrite `update` since it's used by the particle system.
 Append own code after `update` with `lateUpdate`.
+
+## Transition Scenes
+
+```js
+// create a transition
+let transition = new Transition(200);
+transition.set({
+    draw: function (drawlib) {
+        drawlib.rect(0, 0, 128, Math.round(128 * this.progress), Color.white);
+    },
+});
+
+// create a scene with this start and end transition
+let scene = new Scene(transition, apate);
+
+// load the scene (and unload the previous if possible)
+scene.load();
+```
+
+**NOTE:**
+Scenes need a apate instance to play transitions. Set the instance in the constructor or use scene.apateInstance = apate;
