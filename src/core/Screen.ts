@@ -9,6 +9,14 @@ export class Screen {
 
     public pixelBuffer: Uint8Array;
 
+    public get width() {
+        return this.textureWidth;
+    }
+
+    public get height() {
+        return this.textureHeight;
+    }
+
     constructor() {
         this.canvas = document.createElement("canvas");
         this.canvas.width = this.textureWidth;

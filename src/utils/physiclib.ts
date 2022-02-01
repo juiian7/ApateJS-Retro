@@ -11,16 +11,33 @@ interface CollisionCheckModel {
     action: Function;
 }
 
+const sideNames = ["top", "right", "bottom", "left"];
+
 export class PhysicLib {
     private monitoredCollisions: CollisionCheckModel[] = [];
 
     constructor() {}
-    
+
     public isCollisionRect(rect1: Rect, rect2: Rect) {
         return !(rect1.x + rect1.w <= rect2.x || rect2.x + rect2.w <= rect1.x || rect1.y + rect1.h <= rect2.y || rect2.y + rect2.h <= rect1.y);
     }
+
     public isCollision(x1, y1, w1, h1, x2, y2, w2, h2) {
         return !(x1 + w1 <= x2 || x2 + w2 <= x1 || y1 + h1 <= y2 || y2 + h2 <= y1);
+    }
+
+    public getCollisionInfo(x1, y1, w1, h1, x2, y2, w2, h2) {
+        var sides = [y1 + h1 - y2, x2 + w2 - x1, y2 + h2 - y1, x1 + w1 - x2];
+        let nearestSide = 0;
+        for (let i = 0; i < 4; i++) if (sides[i] < sides[nearestSide]) nearestSide = i;
+        return {
+            top: sides[0], // top
+            right: sides[1], // right
+            bottom: sides[2], // bottom
+            left: sides[3], // left
+            nearestSide: nearestSide,
+            nearestSideName: sideNames[nearestSide],
+        };
     }
 
     public watch(rect1: Rect, rect2: Rect, action: Function): CollisionCheckModel {

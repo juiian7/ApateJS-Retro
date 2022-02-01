@@ -1,10 +1,12 @@
 import type { DrawLib } from "../utils/drawlib.js";
 import { Engine } from "./Engine.js";
 import { Entity } from "./Entity.js";
+import { Transition } from "./Transition.js";
 
 export class Scene {
     protected entities: Entity[] = [];
     private _apateInstance?: Engine;
+    private _transition?: Transition;
 
     set apateInstance(value: Engine) {
         this._apateInstance = value;
@@ -17,7 +19,14 @@ export class Scene {
         }
     }
 
-    constructor() {}
+    get apateInstance() {
+        return this._apateInstance;
+    }
+
+    constructor(transition?: Transition, apateInstace?: Engine) {
+        this._transition = transition;
+        this._apateInstance = apateInstace;
+    }
 
     add(entity: Entity) {
         this.entities.push(entity);
@@ -42,5 +51,26 @@ export class Scene {
         for (let i = 0; i < this.entities.length; i++) {
             if (this.entities[i].doDraw) this.entities[i].draw(draw);
         }
+    }
+
+    onLoad() {}
+
+    async load() {
+        if (this._apateInstance) {
+            if (this._apateInstance.activeScene._transition) {
+                this._apateInstance.activeScene.add(this._apateInstance.activeScene._transition);
+                await this._apateInstance.activeScene._transition.do("start");
+                this._apateInstance.activeScene.remove(this._apateInstance.activeScene._transition);
+            }
+
+            this.onLoad();
+            this._apateInstance.activeScene = this;
+
+            if (this._transition) {
+                this.add(this._transition);
+                await this._transition.do("end");
+                this.remove(this._transition);
+            }
+        } else console.error("Can't load scene without apate instance");
     }
 }

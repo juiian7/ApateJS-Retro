@@ -3,13 +3,17 @@ import { Screen } from "./Screen.js";
 import { Input } from "./Input.js";
 
 import { DrawLib } from "../utils/drawlib.js";
-import { Color } from "../utils/Color.js";
-import { Random } from "../utils/Random.js";
+import { Color } from "../utils/color.js";
+import { Random } from "../utils/random.js";
 import { PhysicLib } from "../utils/physiclib.js";
+import { spritelib } from "../utils/spritelib.js";
 
 export class Engine {
     private _activeScene: Scene = new Scene();
     private _lastFrame: boolean = false;
+    private _cursor: { img?: ImageData; x: number; y: number; scale: number } = { x: 0, y: 0, scale: 1 };
+    private _camera: { x: number; y: number } = { x: 0, y: 0 };
+
     protected screen: Screen;
 
     public draw: DrawLib;
@@ -17,7 +21,7 @@ export class Engine {
     public random: Random;
     public physic: PhysicLib;
 
-    public isCursorVisible: boolean = false;
+    public drawCursor: boolean = false;
     public showInfo: boolean = false;
     public autoScale: boolean = false;
 
@@ -51,9 +55,30 @@ export class Engine {
             4
         );
 
+        this.screen.canvas.style.cursor = "none";
         document.body.append(this.screen.canvas);
 
         window.addEventListener("resize", this.onWindowResize.bind(this));
+
+        this.loadCursor("https://raw.githubusercontent.com/juiian7/ApateJS-Retro/7ff7976ef459c20d3df18275aac089364e2aa731/res/default_cursor.png");
+    }
+
+    public async loadCursor(url: string, point?: { x: number; y: number }, scale: number = 1) {
+        this._cursor = {
+            img: await spritelib.load(url),
+            x: point?.x ?? 0,
+            y: point?.y ?? 0,
+            scale,
+        };
+    }
+
+    public async loadCursorSync(img: HTMLImageElement, point?: { x: number; y: number }, scale: number = 1) {
+        this._cursor = {
+            img: spritelib.loadSync(img),
+            x: point?.x ?? 0,
+            y: point?.y ?? 0,
+            scale,
+        };
     }
 
     public run() {
@@ -68,6 +93,12 @@ export class Engine {
         var lastFrames = 0;
         var frameCounter = 0;
 
+        var tmp = 0;
+        var calcCursorColor = (pixels: Uint8Array, ndx: number) => {
+            tmp = 255 - (pixels[ndx] + pixels[ndx + 1] + pixels[ndx + 2]) / 3;
+            return { r: tmp, g: tmp, b: tmp };
+        };
+
         var loop = () => {
             time = new Date().getTime();
             delta = time - lastTime;
@@ -80,7 +111,17 @@ export class Engine {
                 frameCounter = 0;
             }
 
+            if (delta > 400) {
+                console.info("Skipping frame");
+                window.requestAnimationFrame(loop);
+
+                lastTime = time;
+                return;
+            }
+
             this.screen.clear(this.clearColor.r, this.clearColor.g, this.clearColor.b);
+
+            this.draw.setOffset(this._camera.x, this._camera.y);
 
             // update
             this._activeScene.update(delta);
@@ -88,7 +129,12 @@ export class Engine {
 
             // draw
             this._activeScene.draw(this.draw);
+
+            this.draw.setOffset(0, 0);
             if (this.showInfo) this.draw.text(1, 1, "FPS:" + lastFrames, Color.white);
+            if (this.drawCursor) {
+                this.draw.fragment(this.input.mousePos.x, this.input.mousePos.y, this._cursor.img, calcCursorColor, this._cursor.scale);
+            }
 
             this.screen.updateScreen();
 
@@ -103,6 +149,11 @@ export class Engine {
 
     public clear() {
         this.screen.clear(this.clearColor.r, this.clearColor.g, this.clearColor.b);
+    }
+
+    public camera(x: number, y: number) {
+        this._camera.x = x * -1;
+        this._camera.y = y;
     }
 
     public stop() {

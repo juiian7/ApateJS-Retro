@@ -1,4 +1,5 @@
-import { Color, Particle, ParticleSystem, spritelib } from "../../../dist/apate.js";
+import { Color, Particle, ParticleSystem } from "../../../dist/apate.js";
+import { storage } from "../game.js";
 
 export default class EnemySystem extends ParticleSystem {
     constructor() {
@@ -6,6 +7,8 @@ export default class EnemySystem extends ParticleSystem {
 
         this.fps = 10;
         this.nextFrame = 1000 / this.fps;
+
+        this.frames = storage.enemyFrames;
 
         this.velocityModifier = 0;
 
@@ -17,9 +20,6 @@ export default class EnemySystem extends ParticleSystem {
     }
 
     async init() {
-        let sprite = spritelib.loadSync(document.querySelector("#enemy"));
-        this.frames = spritelib.split(sprite, 8, 8, 0);
-
         this.apate.activeScene.add(this.explosionSystem);
     }
 

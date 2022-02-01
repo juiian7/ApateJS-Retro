@@ -1,4 +1,4 @@
-import { Button } from "../utils/Button.js";
+import { Button } from "../utils/button.js";
 import { Screen } from "./Screen.js";
 
 interface RegisteredButtons {
@@ -15,7 +15,7 @@ interface RegisteredButtons {
 // TODO: Controller handling
 export class Input {
     private pressedKeys: string[] = [];
-    public isMousePressed: boolean = true;
+    public isMousePressed: boolean = false;
     public mousePos = { x: 0, y: 0 };
 
     private buttons: { [name: string]: Button } = {};

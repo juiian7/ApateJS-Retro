@@ -1,4 +1,4 @@
-import { Apate, Button, Color, Entity, Scene } from "../../dist/apate.js";
+import { Apate, Button, Color, Entity, Scene, spritelib, Transition } from "../../dist/apate.js";
 
 import EnemySystem from "./scripts/enemySystem.js";
 import Ship from "./scripts/ship.js";
@@ -6,7 +6,11 @@ import StarMap from "./scripts/starMap.js";
 
 let apate = new Apate();
 
-export var storage = {};
+export var storage = {
+    shipSprite: spritelib.loadSync(document.querySelector("#ship")),
+    bulletSprite: spritelib.loadSync(document.querySelector("#bullet")),
+    enemyFrames: spritelib.split(spritelib.loadSync(document.querySelector("#enemy")), 8, 8, 0),
+};
 export default apate;
 
 apate.showInfo = true;
@@ -15,9 +19,16 @@ apate.clearColor = new Color(12, 10, 30);
 let btnR = new Button("restart", ["KeyR"], 2);
 apate.input.addButton(btnR);
 
+let transition = new Transition(200);
+transition.set({
+    draw: function (drawlib) {
+        drawlib.rect(0, 0, 128, Math.round(128 * this.progress), Color.white);
+    },
+});
+
 class Game extends Scene {
     constructor() {
-        super();
+        super(transition, apate);
 
         this.isGameOver = false;
         this.starMap = new StarMap();
@@ -43,11 +54,12 @@ class Game extends Scene {
         this.enemySystem.velocityModifier = 4;
 
         let gameOver = new Entity();
-
+        gameOver.storage.hasRestarted = false;
         gameOver.set({
             update: function (delta) {
-                if (this.apate.input.isButtonDown(btnR)) {
+                if (this.apate.input.isButtonDown(btnR) && !gameOver.storage.hasRestarted) {
                     restart();
+                    gameOver.storage.hasRestarted = true;
                 }
             },
             draw: function (draw) {
@@ -61,9 +73,7 @@ class Game extends Scene {
 }
 
 function restart() {
-    // TODO: Transition
-    let scene = new Game();
-    apate.activeScene = scene;
+    new Game().load();
 }
 restart();
 
