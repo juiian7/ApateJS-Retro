@@ -5,7 +5,9 @@
   "main": "dist/apate.js",
   "scripts": {
     "build": "tsc && rollup dist/apate.js --file dist/mini.js",
-    "dev": "nodemon --config nodemon.json"
+    "dev": "nodemon --config nodemon.json",
+    "test": "eslint src/**/*.ts && prettier --check \"src/**/*.ts\"",
+    "format": "prettier src/**/*.ts -w"
   },
   "repository": {
     "type": "git",
@@ -13,16 +15,20 @@
   },
   "author": "juiian7",
   "license": "GPL-3.0",
-  "dependencies": {
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.8.0",
+    "@typescript-eslint/parser": "^5.8.0",
+    "eslint": "^8.5.0",
     "nodemon": "^2.0.15",
-    "rollup": "^2.61.1",
-    "typescript": "4.4.4"
+    "prettier": "^2.5.1",
+    "rollup": "^2.62.0",
+    "typescript": "^4.4.4"
   },
   "prettier": {
     "singleQuote": false,
     "tabWidth": 4,
     "printWidth": 200,
     "trailingComma": "es5",
-    "endOfLine": "lf"
+    "endOfLine": "auto"
   }
 }

@@ -4,11 +4,11 @@ import { Screen } from "./Screen.js";
 interface RegisteredButtons {
     up: {
         btn: Button;
-        action: Function;
+        action: () => void;
     }[];
     down: {
         btn: Button;
-        action: Function;
+        action: () => void;
     }[];
 }
 
@@ -112,7 +112,7 @@ export class Input {
         this.mousePos.y = Math.floor(ev.touches[0].pageY / this._screen.scale);
     }
 
-    public on(btn: Button | "mouse" | string, ev: "up" | "down", action: Function) {
+    public on(btn: Button | "mouse" | string, ev: "up" | "down", action: () => void) {
         if (typeof btn == "string") {
             this.registeredButtons[ev].push({ btn: new Button(btn, [btn]), action });
         } else {

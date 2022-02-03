@@ -7,7 +7,7 @@ class PixelScreen {
     constructor(apate: Apate_M) {
         this._apate = apate;
     }
-    public resize(w, h) {
+    public resize(w: number, h: number) {
         this._apate.resize(w, h);
     }
     public get pixel() {
@@ -17,7 +17,7 @@ class PixelScreen {
 
 type Color_M = { r: number; g: number; b: number };
 
-export function color(r, g, b) {
+export function color(r: number, g: number, b: number) {
     return new Color(r, g, b);
 }
 
@@ -35,7 +35,7 @@ class Screen {
     drawRect(x: number, y: number, w: number, h: number, c: Color_M) {
         this._apate.draw.rect(Math.round(x), Math.round(y), w, h, c);
     }
-    drawSprite(x: number, y: number, spriteObj, scale: number) {
+    drawSprite(x: number, y: number, spriteObj: ImageData, scale: number) {
         this._apate.draw.spriteExt(Math.round(x), Math.round(y), spriteObj, scale, null);
     }
     drawText(x: number, y: number, text: string, c: Color_M, options) {
@@ -152,13 +152,13 @@ export default class Apate {
         window.requestAnimationFrame(loop);
     }
 
-    public isButtonPressed(name) {
+    public isButtonPressed(name: string) {
         return this._apate.input.isButtonDown(name.toLowerCase());
     }
     public loadObjFromBrowser(name: string) {
         return window.localStorage.getItem(name);
     }
-    public saveObjToBrowser(name: string, obj) {
+    public saveObjToBrowser(name: string, obj: any) {
         window.localStorage.setItem(name, obj);
     }
 }
@@ -199,11 +199,11 @@ export class Entity {
         this._entity = new Entity_O({ allowOwnEvents: true, bindThisOnEventAction: true, storage: {} });
     }
 
-    on(ev, fun) {
-        this[ev] = fun;
+    on(ev: string, action: () => void) {
+        this[ev] = action;
     }
 
-    update(delta) {}
+    update(delta: number) {}
     draw(draw) {}
 }
 
@@ -224,7 +224,7 @@ export class SpriteMgr {
     public imgToSprite(img: HTMLImageElement): ImageData {
         return spritelib.loadSync(img);
     }
-    public subSprite(sprite: ImageData, x, y, w, h) {
+    public subSprite(sprite: ImageData, x: number, y: number, w: number, h: number) {
         return spritelib.split(sprite, w, h, y)[x / w];
     }
 }
@@ -261,7 +261,7 @@ export class ParticleSystem {
     public stop() {
         this._particleSystem.isRunning = false;
     }
-    public update(delta) {
+    public update(delta: number) {
         this._particleSystem.update(delta);
     }
     public draw(screen: Screen) {

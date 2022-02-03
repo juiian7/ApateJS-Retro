@@ -54,7 +54,7 @@ export class Entity {
         }
     }
 
-    public on(event: string, action: Function) {
+    public on(event: string, action: () => void) {
         let ev = {};
         ev[event] = action;
         this.set(ev);

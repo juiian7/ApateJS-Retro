@@ -8,7 +8,7 @@ interface Rect {
 interface CollisionCheckModel {
     a: Rect;
     b: Rect;
-    action: Function;
+    action: () => void;
 }
 
 const sideNames = ["top", "right", "bottom", "left"];
@@ -40,7 +40,7 @@ export class PhysicLib {
         };
     }
 
-    public watch(rect1: Rect, rect2: Rect, action: Function): CollisionCheckModel {
+    public watch(rect1: Rect, rect2: Rect, action: () => void): CollisionCheckModel {
         this.monitoredCollisions.push({ a: rect1, b: rect2, action });
         return this.monitoredCollisions[this.monitoredCollisions.length - 1];
     }
@@ -52,7 +52,9 @@ export class PhysicLib {
 
     public checkAllCollisions() {
         for (let i = 0; i < this.monitoredCollisions.length; i++) {
-            if (this.isCollisionRect(this.monitoredCollisions[i].a, this.monitoredCollisions[i].b)) this.monitoredCollisions[i].action();
+            if (this.isCollisionRect(this.monitoredCollisions[i].a, this.monitoredCollisions[i].b)) {
+                this.monitoredCollisions[i].action();
+            }
         }
     }
 }
