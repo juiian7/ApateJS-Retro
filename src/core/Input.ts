@@ -12,6 +12,9 @@ interface RegisteredButtons {
     }[];
 }
 
+// TODO: Refactor controller support
+// TODO: add controller deadzone
+
 export class Input {
     private pressedKeys: string[] = [];
     public isMousePressed: boolean = false;
@@ -154,7 +157,10 @@ export class Input {
         }
 
         if (btn.controllerBind != null && this.controllers.length > 0) {
-            this.controllers = navigator.getGamepads(); // need to call getGamepads to refresh list
+            // need to call getGamepads to refresh list
+            this.controllers = Object.entries(navigator.getGamepads())
+                .map(([key, value]) => value)
+                .filter((n) => n);
 
             for (let i = 0; i < this.controllers.length; i++) {
                 if (this.controllers[i].buttons[btn.controllerBind].pressed) {
