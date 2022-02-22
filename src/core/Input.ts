@@ -21,7 +21,7 @@ export class Input {
 
     private registeredButtons: RegisteredButtons = { up: [], down: [] };
 
-    private controllers: Gamepad[] = [];
+    private gamepads: Gamepad[] = [];
 
     private _screen: Screen;
     private _rootElement: HTMLElement;
@@ -49,23 +49,34 @@ export class Input {
         }
     }
 
-    private getGamepadList() {
-        // get gamepad object, convert it to an array and remove empty elements
-        return Object.entries(navigator.getGamepads())
-            .map(([key, value]) => value)
-            .filter((n) => n);
-    }
-
     private onGamepadConnected(ev: GamepadEvent) {
         let gamepad = ev.gamepad;
         console.log(`Gamepad connected! Index: ${gamepad.index}, Name: ${gamepad.id}`);
-        this.controllers[gamepad.index] = gamepad;
-        console.log(gamepad);
+        this.gamepads[gamepad.index] = gamepad;
     }
     private onGamepadDisconnected(ev: GamepadEvent) {
         let gamepad = ev.gamepad;
         console.log(`Gamepad disconnected! Index: ${gamepad.index}`);
-        delete this.controllers[gamepad.index];
+        delete this.gamepads[gamepad.index];
+    }
+    private getGamepadList(): Gamepad[] {
+        // get gamepad object, convert it to an array
+        return Object.entries(navigator.getGamepads()).map(([key, value]) => value);
+    }
+    private updateGamepads() {
+        // refresh gamepad list outside of firefox
+        if (!("ongamepadconnected" in window)) {
+            this.gamepads = this.getGamepadList();
+        }
+    }
+    public getGamepad(): Gamepad {
+        if (this.gamepads.length > 0) {
+            // get first non null element
+            return this.gamepads.find((c) => c != null);
+        } else {
+            // TODO: Return dummy gamepad
+            return null;
+        }
     }
 
     private onKeyDown(ev: KeyboardEvent) {
@@ -153,14 +164,9 @@ export class Input {
             if (this.pressedKeys.includes(btn.keybinds[i])) return true;
         }
 
-        if (btn.controllerBind != null && this.controllers.length > 0) {
-            // refresh gamepad list outside of firefox
-            if (!("ongamepadconnected" in window)) {
-                this.controllers = this.getGamepadList();
-            }
-
-            for (let i = 0; i < this.controllers.length; i++) {
-                if (this.controllers[i].buttons[btn.controllerBind].pressed) {
+        if (btn.controllerBind != null && this.gamepads.length > 0) {
+            for (let i = 0; i < this.gamepads.length; i++) {
+                if (this.gamepads[i].buttons[btn.controllerBind].pressed) {
                     return true;
                 }
             }
@@ -170,11 +176,12 @@ export class Input {
     }
 
     public getAxis(): { v: number; h: number } {
-        if (this.controllers.length > 0) {
-            const deadzone = 0.15;
+        if (this.gamepads.length > 0) {
+            const deadzone = 0.16;
 
-            let ch = this.controllers[0].axes[0];
-            let cv = this.controllers[0].axes[1] * -1;
+            let gamepad = this.getGamepad();
+            let ch = gamepad.axes[0];
+            let cv = gamepad.axes[1] * -1;
 
             if ((ch > deadzone && -ch < -deadzone) || (cv > deadzone && -cv < -deadzone)) {
                 return { v: cv, h: ch };

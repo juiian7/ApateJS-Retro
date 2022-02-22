@@ -129,6 +129,7 @@ export class Engine {
             this.draw.setOffset(this._camera.x, this._camera.y);
 
             // update
+            this.input.updateGamepads();
             this._activeScene.update(delta);
             this.physic.checkAllCollisions();
 
