@@ -1,3 +1,5 @@
+import { Color } from "./color.js";
+
 type Sprite = ImageData;
 
 class SpriteLib {
@@ -71,6 +73,22 @@ class SpriteLib {
         tmpCtx.setTransform(1, 0, 0, 1, 0, 0);
 
         return tmpCtx.getImageData(0, 0, sprite.width, sprite.height);
+    }
+
+    createCopy(sprite: Sprite) {
+        return new ImageData(new Uint8ClampedArray(sprite.data), sprite.width, sprite.height);
+    }
+
+    replaceColor(sprite: Sprite, from: Color, to: Color) {
+        for (let i = 0; i < sprite.data.length; i += 4) {
+            if (sprite.data[i + 3] == 0) continue;
+            else if (sprite.data[i] == from.r && sprite.data[i + 1] == from.g && sprite.data[i + 2] == from.b) {
+                sprite.data[i] = to.r;
+                sprite.data[i + 1] = to.g;
+                sprite.data[i + 2] = to.b;
+            }
+        }
+        return sprite;
     }
 }
 

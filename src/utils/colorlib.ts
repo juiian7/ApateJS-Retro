@@ -17,6 +17,11 @@ class ColorLib {
     public colorToHex(color: Color): string {
         return "#" + this.componentToHex(color.r) + this.componentToHex(color.g) + this.componentToHex(color.b);
     }
+
+    public isSame(colorA: Color, colorB: Color, tolerance?: number) {
+        // TODO: implement tolerance
+        return colorA.r == colorB.r && colorA.g == colorB.g && colorA.b == colorB.b;
+    }
 }
 
 export var colorlib = new ColorLib();
