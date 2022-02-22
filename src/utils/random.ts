@@ -2,19 +2,24 @@
  * A pseudorandom number generator using the Wichman-Hill algorithm
  */
 export class Random {
-    public seed: number;
+    private _seed: number;
 
     private a: number;
     private b: number;
     private c: number;
 
-    constructor(seed?: number) {
-        if (!seed) seed = new Date().getTime();
+    public set seed(value: number) {
+        this._seed = value;
+        this.a = value;
+        this.b = value;
+        this.c = value;
+    }
+    public get seed(): number {
+        return this._seed;
+    }
 
-        this.seed = seed;
-        this.a = seed;
-        this.b = seed;
-        this.c = seed;
+    constructor(seed?: number) {
+        this.seed = seed ?? new Date().getTime();
     }
 
     next(): number {
@@ -25,6 +30,7 @@ export class Random {
     }
 
     /**
+     * Generates a random number
      * @param min inclusive minimum
      * @param max exclusive maximum
      */
@@ -33,6 +39,7 @@ export class Random {
     }
 
     /**
+     * Generates a random integer
      * @param min inclusive minimum
      * @param max exclusive maximum
      */
