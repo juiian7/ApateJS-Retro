@@ -49,8 +49,8 @@ export class Engine {
         this.physic = new PhysicLib();
 
         this.draw.loadFont(
-            "https://raw.githubusercontent.com/juiian7/ApateJS-Retro/4d178bfea79a0ef601130d7d0c6a69c473e7e1ae/res/default_text.png",
-            "ABCDEFGHIJKLMNOPQRSTUVWXYZ.!?:+-*/=()0123456789",
+            "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAANwAAAAFCAYAAAAua4JmAAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAA3KADAAQAAAABAAAABQAAAADuh69NAAACAklEQVRYCa2UW04DQQwECeL+Vw5pkopKjWdn0TJSsPvhtsNHbh/Pd3/V26PShwrOg9vp8U4e5qPnde6TPc8zn7lkTzsnjTnf49mdnkw/ZnvuDPbdzvFt7DqTF29nMg+PB569wexAY8b34DGH3xno7Qd7Jj274JkPzkzr+K7Uo8xJa864+9zV3zWen/duHij9FZxAz+8wXmr8fuHRuuJrD77o1v4De+eqP7sfX1dyuZeKzzp9NPSpwuFPbc44PZjK7ArDU9nRmBxXeya+9R3eZXg+fWPPu8dHPavhu3/RVSWQXxfkxvD2h2tsrvvg3Ute/2J4prWd3/fROw+O3Mb2/rXnf0h25sknC9xe854jC52cVDLM2UfvjJ6JBz05zKQ3D0ZHA0c/+7yTHGaNycYPjje+fNDC9XNWaxNeZbFnmnlzn68uIatD3+bymOeLwTUO7y826cym+pbg+JsLv3o7/7Q/+eHz0NnZ+Ok6/us8cjIBD+ed1uHh8Adfeewnf/pu7LIXLruZme6YZo785HUW9zUf3LeEw88uMPd4Jn5e+JWGxzW5kz8cO+3/1Xs4vT+Y4YLpU3nmzLcebP1ozlrnoK3y7MfDXioe687d8dM8nHfQk2288tuLn3uozTcmGz/Y2WietW+lk4EXH7j1CePtWfjpJrQr9Uzu5GnOuHtjbg13/wZnlB52mTDTXwAAAABJRU5ErkJggg==",
+            "ABCDEFGHIJKLMNOPQRSTUVWXYZÄÜÖ0123456789.!?':+-*/=()<>[]",
             4
         );
 
@@ -59,7 +59,9 @@ export class Engine {
 
         window.addEventListener("resize", this.onWindowResize.bind(this));
 
-        this.loadCursor("https://raw.githubusercontent.com/juiian7/ApateJS-Retro/7ff7976ef459c20d3df18275aac089364e2aa731/res/default_cursor.png");
+        this.loadCursor(
+            "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAYAAABytg0kAAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAAqADAAQAAAABAAAAAgAAAADtGLyqAAAAEElEQVQIHWP8DwQMIABjAABXzAf6jU4fqAAAAABJRU5ErkJggg=="
+        );
     }
 
     public async loadCursor(url: string, point?: { x: number; y: number }, scale: number = 1) {
