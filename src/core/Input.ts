@@ -14,8 +14,6 @@ interface RegisteredButtons {
 
 export class Input {
     private _screen: Screen;
-    private _rootElement: HTMLElement;
-    private _gamepadDeadzone = 0.18;
 
     private pressedKeys: string[] = [];
     public isMousePressed: boolean = false;
@@ -26,22 +24,22 @@ export class Input {
     private registeredButtons: RegisteredButtons = { up: [], down: [] };
 
     private gamepads: Gamepad[] = [];
-    private pressedGamepadsButtons: boolean[] = [];
+    private gamepadPressedButtons: boolean[] = [];
+    public gamepadDeadzone: number = 0.18;
 
-    constructor(rootElement: HTMLElement, screen: Screen) {
+    constructor(screen: Screen) {
         this._screen = screen;
-        this._rootElement = rootElement;
 
         window.addEventListener("keydown", this.onKeyDown.bind(this));
         window.addEventListener("keyup", this.onKeyUp.bind(this));
 
-        rootElement.addEventListener("mousedown", this.onMouseDown.bind(this));
-        rootElement.addEventListener("mouseup", this.onMouseUp.bind(this));
-        rootElement.addEventListener("mousemove", this.onMouseMove.bind(this));
+        screen.canvas.addEventListener("mousedown", this.onMouseDown.bind(this));
+        screen.canvas.addEventListener("mouseup", this.onMouseUp.bind(this));
+        screen.canvas.addEventListener("mousemove", this.onMouseMove.bind(this));
 
-        rootElement.addEventListener("touchstart", this.onTouchStart.bind(this));
-        rootElement.addEventListener("touchend", this.onTouchEnd.bind(this));
-        rootElement.addEventListener("touchmove", this.onTouchMove.bind(this));
+        screen.canvas.addEventListener("touchstart", this.onTouchStart.bind(this));
+        screen.canvas.addEventListener("touchend", this.onTouchEnd.bind(this));
+        screen.canvas.addEventListener("touchmove", this.onTouchMove.bind(this));
 
         window.addEventListener("gamepadconnected", this.onGamepadConnected.bind(this));
         window.addEventListener("gamepaddisconnected", this.onGamepadDisconnected.bind(this));
@@ -133,11 +131,11 @@ export class Input {
         let gamepad = this.getGamepad();
         if (gamepad) {
             for (let i = 0; i < gamepad.buttons.length; i++) {
-                if (gamepad.buttons[i].pressed && !this.pressedGamepadsButtons[i]) {
-                    this.pressedGamepadsButtons[i] = true;
+                if (gamepad.buttons[i].pressed && !this.gamepadPressedButtons[i]) {
+                    this.gamepadPressedButtons[i] = true;
                     this.runRegisteredGamepadActions("down", i);
-                } else if (!gamepad.buttons[i].pressed && this.pressedGamepadsButtons[i]) {
-                    this.pressedGamepadsButtons[i] = false;
+                } else if (!gamepad.buttons[i].pressed && this.gamepadPressedButtons[i]) {
+                    this.gamepadPressedButtons[i] = false;
                     this.runRegisteredGamepadActions("up", i);
                 }
             }
@@ -186,7 +184,7 @@ export class Input {
             let ch = gamepad.axes[0];
             let cv = gamepad.axes[1] * -1;
 
-            if (ch > this._gamepadDeadzone || ch < -this._gamepadDeadzone || cv > this._gamepadDeadzone || cv < -this._gamepadDeadzone) {
+            if (ch > this.gamepadDeadzone || ch < -this.gamepadDeadzone || cv > this.gamepadDeadzone || cv < -this.gamepadDeadzone) {
                 return { v: cv, h: ch };
             }
         }
