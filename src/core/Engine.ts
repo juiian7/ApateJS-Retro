@@ -27,7 +27,7 @@ export class Engine {
 
     public drawCursor: boolean = false;
     public showInfo: boolean = false;
-    public autoScale: boolean = false;
+    public autoScale: boolean = true;
 
     public clearColor: Color = Color.black;
 
@@ -122,7 +122,6 @@ export class Engine {
                 return;
             }
 
-            // TODO: move this before `this._activeScene.draw(this.draw);`?
             this.screen.clear(this.clearColor.r, this.clearColor.g, this.clearColor.b);
 
             this.draw.setOffset(this._camera.x, this._camera.y);

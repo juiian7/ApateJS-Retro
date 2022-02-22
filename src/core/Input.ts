@@ -15,6 +15,7 @@ interface RegisteredButtons {
 export class Input {
     private _screen: Screen;
     private _rootElement: HTMLElement;
+    private _gamepadDeadzone = 0.18;
 
     private pressedKeys: string[] = [];
     public isMousePressed: boolean = false;
@@ -25,6 +26,7 @@ export class Input {
     private registeredButtons: RegisteredButtons = { up: [], down: [] };
 
     private gamepads: Gamepad[] = [];
+    private pressedGamepadsButtons: boolean[] = [];
 
     constructor(rootElement: HTMLElement, screen: Screen) {
         this._screen = screen;
@@ -103,6 +105,13 @@ export class Input {
             }
         }
     }
+    private runRegisteredGamepadActions(ev: "down" | "up", btnBind: number) {
+        for (let i = 0; i < this.registeredButtons[ev].length; i++) {
+            if (this.registeredButtons[ev][i].btn.controllerBind === btnBind) {
+                this.registeredButtons[ev][i].action();
+            }
+        }
+    }
 
     private onGamepadConnected(ev: GamepadEvent) {
         let gamepad = ev.gamepad;
@@ -119,6 +128,19 @@ export class Input {
         if (!("ongamepadconnected" in window)) {
             // get gamepad object and convert it to an array
             this.gamepads = Object.entries(navigator.getGamepads()).map(([key, value]) => value);
+        }
+
+        let gamepad = this.getGamepad();
+        if (gamepad) {
+            for (let i = 0; i < gamepad.buttons.length; i++) {
+                if (gamepad.buttons[i].pressed && !this.pressedGamepadsButtons[i]) {
+                    this.pressedGamepadsButtons[i] = true;
+                    this.runRegisteredGamepadActions("down", i);
+                } else if (!gamepad.buttons[i].pressed && this.pressedGamepadsButtons[i]) {
+                    this.pressedGamepadsButtons[i] = false;
+                    this.runRegisteredGamepadActions("up", i);
+                }
+            }
         }
     }
 
@@ -160,13 +182,11 @@ export class Input {
 
     public getAxis(): { v: number; h: number } {
         if (this.isGamepadConnected()) {
-            const deadzone = 0.18;
-
             let gamepad = this.getGamepad();
             let ch = gamepad.axes[0];
             let cv = gamepad.axes[1] * -1;
 
-            if (ch > deadzone || ch < -deadzone || cv > deadzone || cv < -deadzone) {
+            if (ch > this._gamepadDeadzone || ch < -this._gamepadDeadzone || cv > this._gamepadDeadzone || cv < -this._gamepadDeadzone) {
                 return { v: cv, h: ch };
             }
         }
@@ -190,7 +210,7 @@ export class Input {
             // get first non null element
             return this.gamepads.find((c) => c != null);
         } else {
-            // TODO: return dummy gamepad
+            // TODO: return dummy gamepad?
             return null;
         }
     }

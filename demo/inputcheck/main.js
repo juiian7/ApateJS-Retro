@@ -1,12 +1,9 @@
 import { Apate, Button, Color, Entity } from "../../dist/apate.js";
 
 const apate = new Apate();
-
 apate.showInfo = true;
-apate.clearColor = new Color(12, 10, 30);
 
 var entity = new Entity();
-
 entity.set({
     draw: function (drawlib) {
         drawlib.text(1, 20, `Up ${apate.input.isButtonDown("up") ? "true" : "false"}`, Color.white);
@@ -20,6 +17,10 @@ entity.set({
         drawlib.text(1, 80, `Axis H ${apate.input.getAxis().h.toFixed(7)}`, Color.white);
         drawlib.text(1, 88, `Axis V ${apate.input.getAxis().v.toFixed(7)}`, Color.white);
     },
+});
+
+apate.input.on(Button.action1, "down", () => {
+    console.log("Nais");
 });
 
 apate.activeScene.add(entity);
