@@ -188,7 +188,6 @@ export class Input {
     public getGamepad(): Gamepad {
         if (this.isGamepadConnected()) {
             // get first non null element
-            console.log(this.gamepads.find((c) => c != null));
             return this.gamepads.find((c) => c != null);
         } else {
             // TODO: return dummy gamepad
