@@ -27,7 +27,7 @@ export class Engine {
 
     public drawCursor: boolean = false;
     public showInfo: boolean = false;
-    public autoScale: boolean = false;
+    public autoScale: boolean = true;
 
     public clearColor: Color = Color.black;
 
@@ -48,7 +48,7 @@ export class Engine {
         this.screen.scale = this.screen.maxScale;
 
         this.draw = new DrawLib(this.screen);
-        this.input = new Input(this.screen.canvas, this.screen);
+        this.input = new Input(this.screen);
         this.random = new Random();
         this.physic = new PhysicLib();
 
@@ -107,7 +107,6 @@ export class Engine {
         var loop = () => {
             time = new Date().getTime();
             delta = time - lastTime;
-
             nextSecond -= delta;
 
             if (nextSecond < 0) {
@@ -119,7 +118,6 @@ export class Engine {
             if (delta > 400) {
                 console.info("Skipping frame");
                 window.requestAnimationFrame(loop);
-
                 lastTime = time;
                 return;
             }
@@ -129,6 +127,8 @@ export class Engine {
             this.draw.setOffset(this._camera.x, this._camera.y);
 
             // update
+            // @ts-ignore
+            this.input.updateGamepads();
             this._activeScene.update(delta);
             this.physic.checkAllCollisions();
 
@@ -136,7 +136,9 @@ export class Engine {
             this._activeScene.draw(this.draw);
 
             this.draw.setOffset(0, 0);
-            if (this.showInfo) this.draw.text(1, 1, "FPS:" + lastFrames, Color.white);
+            if (this.showInfo) {
+                this.draw.text(1, 1, "FPS:" + lastFrames, Color.white);
+            }
             if (this.drawCursor) {
                 this.draw.fragment(this.input.mousePos.x, this.input.mousePos.y, this._cursor.img, calcCursorColor, this._cursor.scale);
             }

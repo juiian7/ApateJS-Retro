@@ -13,6 +13,8 @@ interface RegisteredButtons {
 }
 
 export class Input {
+    private _screen: Screen;
+
     private pressedKeys: string[] = [];
     public isMousePressed: boolean = false;
     public mousePos = { x: 0, y: 0 };
@@ -21,25 +23,23 @@ export class Input {
 
     private registeredButtons: RegisteredButtons = { up: [], down: [] };
 
-    private controllers: Gamepad[] = [];
+    private gamepads: Gamepad[] = [];
+    private gamepadPressedButtons: boolean[] = [];
+    public gamepadDeadzone: number = 0.18;
 
-    private _screen: Screen;
-    private _rootElement: HTMLElement;
-
-    constructor(rootElement: HTMLElement, screen: Screen) {
+    constructor(screen: Screen) {
         this._screen = screen;
-        this._rootElement = rootElement;
 
         window.addEventListener("keydown", this.onKeyDown.bind(this));
         window.addEventListener("keyup", this.onKeyUp.bind(this));
 
-        rootElement.addEventListener("mousedown", this.onMouseDown.bind(this));
-        rootElement.addEventListener("mouseup", this.onMouseUp.bind(this));
-        rootElement.addEventListener("mousemove", this.onMouseMove.bind(this));
+        screen.canvas.addEventListener("mousedown", this.onMouseDown.bind(this));
+        screen.canvas.addEventListener("mouseup", this.onMouseUp.bind(this));
+        screen.canvas.addEventListener("mousemove", this.onMouseMove.bind(this));
 
-        rootElement.addEventListener("touchstart", this.onTouchStart.bind(this));
-        rootElement.addEventListener("touchend", this.onTouchEnd.bind(this));
-        rootElement.addEventListener("touchmove", this.onTouchMove.bind(this));
+        screen.canvas.addEventListener("touchstart", this.onTouchStart.bind(this));
+        screen.canvas.addEventListener("touchend", this.onTouchEnd.bind(this));
+        screen.canvas.addEventListener("touchmove", this.onTouchMove.bind(this));
 
         window.addEventListener("gamepadconnected", this.onGamepadConnected.bind(this));
         window.addEventListener("gamepaddisconnected", this.onGamepadDisconnected.bind(this));
@@ -49,36 +49,13 @@ export class Input {
         }
     }
 
-    private onGamepadConnected(ev: GamepadEvent) {
-        console.log("Controller connected! Name: " + ev.gamepad.id);
-        this.controllers = navigator.getGamepads();
-        console.log(this.controllers);
-
-        console.log(ev);
-    }
-
-    private onGamepadDisconnected(ev: GamepadEvent) {
-        console.log("Controller disconnected!");
-        this.controllers = navigator.getGamepads();
-    }
-
     private onKeyDown(ev: KeyboardEvent) {
         this.pressedKeys.push(ev.code);
-
         this.runRegisteredActions("down", ev.code);
     }
     private onKeyUp(ev: KeyboardEvent) {
         this.pressedKeys = this.pressedKeys.filter((code) => code != ev.code);
-
         this.runRegisteredActions("up", ev.code);
-    }
-
-    private runRegisteredActions(ev: "down" | "up", key: string) {
-        for (let i = 0; i < this.registeredButtons[ev].length; i++) {
-            if (this.registeredButtons[ev][i].btn.keybinds.includes(key)) {
-                this.registeredButtons[ev][i].action();
-            }
-        }
     }
 
     private onMouseDown(ev: MouseEvent) {
@@ -89,7 +66,6 @@ export class Input {
         this.isMousePressed = false;
         this.runRegisteredActions("up", "mouse");
     }
-
     private onMouseMove(ev: MouseEvent) {
         this.mousePos.x = Math.floor(ev.offsetX / this._screen.scale);
         this.mousePos.y = Math.floor(ev.offsetY / this._screen.scale);
@@ -103,7 +79,6 @@ export class Input {
         this.isMousePressed = false;
         this.runRegisteredActions("up", "mouse");
     }
-
     private onTouchMove(ev: TouchEvent) {
         ev.preventDefault();
 
@@ -118,23 +93,64 @@ export class Input {
             this.registeredButtons[ev].push({ btn, action });
         }
     }
-
     public clearRegisteredButtons() {
         this.registeredButtons = { up: [], down: [] };
+    }
+    private runRegisteredActions(ev: "down" | "up", key: string) {
+        for (let i = 0; i < this.registeredButtons[ev].length; i++) {
+            if (this.registeredButtons[ev][i].btn.keybinds.includes(key)) {
+                this.registeredButtons[ev][i].action();
+            }
+        }
+    }
+    private runRegisteredGamepadActions(ev: "down" | "up", btnBind: number) {
+        for (let i = 0; i < this.registeredButtons[ev].length; i++) {
+            if (this.registeredButtons[ev][i].btn.controllerBind === btnBind) {
+                this.registeredButtons[ev][i].action();
+            }
+        }
+    }
+
+    private onGamepadConnected(ev: GamepadEvent) {
+        let gamepad = ev.gamepad;
+        console.log(`Gamepad connected! Index: ${gamepad.index}, Name: ${gamepad.id}`);
+        this.gamepads[gamepad.index] = gamepad;
+    }
+    private onGamepadDisconnected(ev: GamepadEvent) {
+        let gamepad = ev.gamepad;
+        console.log(`Gamepad disconnected! Index: ${gamepad.index}`);
+        delete this.gamepads[gamepad.index];
+    }
+    private updateGamepads() {
+        // refresh gamepad list outside of firefox
+        if (!("ongamepadconnected" in window)) {
+            // get gamepad object and convert it to an array
+            this.gamepads = Object.entries(navigator.getGamepads()).map(([key, value]) => value);
+        }
+
+        let gamepad = this.getGamepad();
+        if (gamepad) {
+            for (let i = 0; i < gamepad.buttons.length; i++) {
+                if (gamepad.buttons[i].pressed && !this.gamepadPressedButtons[i]) {
+                    this.gamepadPressedButtons[i] = true;
+                    this.runRegisteredGamepadActions("down", i);
+                } else if (!gamepad.buttons[i].pressed && this.gamepadPressedButtons[i]) {
+                    this.gamepadPressedButtons[i] = false;
+                    this.runRegisteredGamepadActions("up", i);
+                }
+            }
+        }
     }
 
     public addButton(btn: Button) {
         this.buttons[btn.name] = btn;
     }
-
-    public removeButton(btn: Button) {
-        delete this.buttons[btn.name];
-    }
-
     public getButton(btnName: string): Button {
         return this.buttons[btnName];
     }
-
+    public removeButton(btn: Button) {
+        delete this.buttons[btn.name];
+    }
     public clearButtons() {
         this.buttons = {};
     }
@@ -153,13 +169,9 @@ export class Input {
             if (this.pressedKeys.includes(btn.keybinds[i])) return true;
         }
 
-        if (btn.controllerBind != null && this.controllers.length > 0) {
-            this.controllers = navigator.getGamepads(); // need to call getGamepads to refresh list
-
-            for (let i = 0; i < this.controllers.length; i++) {
-                if (this.controllers[i].buttons[btn.controllerBind].pressed) {
-                    return true;
-                }
+        if (btn.controllerBind != null && this.isGamepadConnected()) {
+            if (this.getGamepad().buttons[btn.controllerBind].pressed) {
+                return true;
             }
         }
 
@@ -167,14 +179,17 @@ export class Input {
     }
 
     public getAxis(): { v: number; h: number } {
-        let axis = { v: 0, h: 0 };
+        if (this.isGamepadConnected()) {
+            let gamepad = this.getGamepad();
+            let ch = gamepad.axes[0];
+            let cv = gamepad.axes[1] * -1;
 
-        if (this.controllers.length > 0) {
-            axis.h = navigator.getGamepads()[0].axes[0];
-            axis.v = navigator.getGamepads()[0].axes[1] * -1;
-
-            if (axis.h != 0 || axis.v != 0) return axis;
+            if (ch > this.gamepadDeadzone || ch < -this.gamepadDeadzone || cv > this.gamepadDeadzone || cv < -this.gamepadDeadzone) {
+                return { v: cv, h: ch };
+            }
         }
+
+        let axis = { v: 0, h: 0 };
 
         if (this.isButtonDown(Button.up)) axis.v += 1;
         if (this.isButtonDown(Button.down)) axis.v -= 1;
@@ -182,5 +197,19 @@ export class Input {
         if (this.isButtonDown(Button.left)) axis.h -= 1;
 
         return axis;
+    }
+
+    public isGamepadConnected(): boolean {
+        return this.gamepads.filter((n) => n).length > 0;
+    }
+
+    public getGamepad(): Gamepad {
+        if (this.isGamepadConnected()) {
+            // get first non null element
+            return this.gamepads.find((c) => c != null);
+        } else {
+            // TODO: return dummy gamepad?
+            return null;
+        }
     }
 }
