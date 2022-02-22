@@ -12,9 +12,6 @@ interface RegisteredButtons {
     }[];
 }
 
-// TODO: Refactor controller support
-// TODO: add controller deadzone
-
 export class Input {
     private pressedKeys: string[] = [];
     public isMousePressed: boolean = false;
@@ -52,17 +49,23 @@ export class Input {
         }
     }
 
-    private onGamepadConnected(ev: GamepadEvent) {
-        console.log("Controller connected! Name: " + ev.gamepad.id);
-        this.controllers = navigator.getGamepads();
-        console.log(this.controllers);
-
-        console.log(ev);
+    private getGamepadList() {
+        // get gamepad object, convert it to an array and remove empty elements
+        return Object.entries(navigator.getGamepads())
+            .map(([key, value]) => value)
+            .filter((n) => n);
     }
 
+    private onGamepadConnected(ev: GamepadEvent) {
+        let gamepad = ev.gamepad;
+        console.log(`Gamepad connected! Index: ${gamepad.index}, Name: ${gamepad.id}`);
+        this.controllers[gamepad.index] = gamepad;
+        console.log(gamepad);
+    }
     private onGamepadDisconnected(ev: GamepadEvent) {
-        console.log("Controller disconnected!");
-        this.controllers = navigator.getGamepads();
+        let gamepad = ev.gamepad;
+        console.log(`Gamepad disconnected! Index: ${gamepad.index}`);
+        delete this.controllers[gamepad.index];
     }
 
     private onKeyDown(ev: KeyboardEvent) {
@@ -92,7 +95,6 @@ export class Input {
         this.isMousePressed = false;
         this.runRegisteredActions("up", "mouse");
     }
-
     private onMouseMove(ev: MouseEvent) {
         this.mousePos.x = Math.floor(ev.offsetX / this._screen.scale);
         this.mousePos.y = Math.floor(ev.offsetY / this._screen.scale);
@@ -106,7 +108,6 @@ export class Input {
         this.isMousePressed = false;
         this.runRegisteredActions("up", "mouse");
     }
-
     private onTouchMove(ev: TouchEvent) {
         ev.preventDefault();
 
@@ -125,19 +126,15 @@ export class Input {
     public clearRegisteredButtons() {
         this.registeredButtons = { up: [], down: [] };
     }
-
     public addButton(btn: Button) {
         this.buttons[btn.name] = btn;
     }
-
     public removeButton(btn: Button) {
         delete this.buttons[btn.name];
     }
-
     public getButton(btnName: string): Button {
         return this.buttons[btnName];
     }
-
     public clearButtons() {
         this.buttons = {};
     }
@@ -157,10 +154,10 @@ export class Input {
         }
 
         if (btn.controllerBind != null && this.controllers.length > 0) {
-            // need to call getGamepads to refresh list
-            this.controllers = Object.entries(navigator.getGamepads())
-                .map(([key, value]) => value)
-                .filter((n) => n);
+            // refresh gamepad list outside of firefox
+            if (!("ongamepadconnected" in window)) {
+                this.controllers = this.getGamepadList();
+            }
 
             for (let i = 0; i < this.controllers.length; i++) {
                 if (this.controllers[i].buttons[btn.controllerBind].pressed) {
@@ -173,14 +170,18 @@ export class Input {
     }
 
     public getAxis(): { v: number; h: number } {
-        let axis = { v: 0, h: 0 };
-
         if (this.controllers.length > 0) {
-            axis.h = navigator.getGamepads()[0].axes[0];
-            axis.v = navigator.getGamepads()[0].axes[1] * -1;
+            const deadzone = 0.15;
 
-            if (axis.h != 0 || axis.v != 0) return axis;
+            let ch = this.controllers[0].axes[0];
+            let cv = this.controllers[0].axes[1] * -1;
+
+            if ((ch > deadzone && -ch < -deadzone) || (cv > deadzone && -cv < -deadzone)) {
+                return { v: cv, h: ch };
+            }
         }
+
+        let axis = { v: 0, h: 0 };
 
         if (this.isButtonDown(Button.up)) axis.v += 1;
         if (this.isButtonDown(Button.down)) axis.v -= 1;
