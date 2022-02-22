@@ -13,6 +13,9 @@ interface RegisteredButtons {
 }
 
 export class Input {
+    private _screen: Screen;
+    private _rootElement: HTMLElement;
+
     private pressedKeys: string[] = [];
     public isMousePressed: boolean = false;
     public mousePos = { x: 0, y: 0 };
@@ -22,9 +25,6 @@ export class Input {
     private registeredButtons: RegisteredButtons = { up: [], down: [] };
 
     private gamepads: Gamepad[] = [];
-
-    private _screen: Screen;
-    private _rootElement: HTMLElement;
 
     constructor(rootElement: HTMLElement, screen: Screen) {
         this._screen = screen;
@@ -49,53 +49,13 @@ export class Input {
         }
     }
 
-    private onGamepadConnected(ev: GamepadEvent) {
-        let gamepad = ev.gamepad;
-        console.log(`Gamepad connected! Index: ${gamepad.index}, Name: ${gamepad.id}`);
-        this.gamepads[gamepad.index] = gamepad;
-    }
-    private onGamepadDisconnected(ev: GamepadEvent) {
-        let gamepad = ev.gamepad;
-        console.log(`Gamepad disconnected! Index: ${gamepad.index}`);
-        delete this.gamepads[gamepad.index];
-    }
-    private getGamepadList(): Gamepad[] {
-        // get gamepad object, convert it to an array
-        return Object.entries(navigator.getGamepads()).map(([key, value]) => value);
-    }
-    private updateGamepads() {
-        // refresh gamepad list outside of firefox
-        if (!("ongamepadconnected" in window)) {
-            this.gamepads = this.getGamepadList();
-        }
-    }
-    public getGamepad(): Gamepad {
-        if (this.gamepads.length > 0) {
-            // get first non null element
-            return this.gamepads.find((c) => c != null);
-        } else {
-            // TODO: Return dummy gamepad
-            return null;
-        }
-    }
-
     private onKeyDown(ev: KeyboardEvent) {
         this.pressedKeys.push(ev.code);
-
         this.runRegisteredActions("down", ev.code);
     }
     private onKeyUp(ev: KeyboardEvent) {
         this.pressedKeys = this.pressedKeys.filter((code) => code != ev.code);
-
         this.runRegisteredActions("up", ev.code);
-    }
-
-    private runRegisteredActions(ev: "down" | "up", key: string) {
-        for (let i = 0; i < this.registeredButtons[ev].length; i++) {
-            if (this.registeredButtons[ev][i].btn.keybinds.includes(key)) {
-                this.registeredButtons[ev][i].action();
-            }
-        }
     }
 
     private onMouseDown(ev: MouseEvent) {
@@ -133,18 +93,43 @@ export class Input {
             this.registeredButtons[ev].push({ btn, action });
         }
     }
-
     public clearRegisteredButtons() {
         this.registeredButtons = { up: [], down: [] };
     }
+    private runRegisteredActions(ev: "down" | "up", key: string) {
+        for (let i = 0; i < this.registeredButtons[ev].length; i++) {
+            if (this.registeredButtons[ev][i].btn.keybinds.includes(key)) {
+                this.registeredButtons[ev][i].action();
+            }
+        }
+    }
+
+    private onGamepadConnected(ev: GamepadEvent) {
+        let gamepad = ev.gamepad;
+        console.log(`Gamepad connected! Index: ${gamepad.index}, Name: ${gamepad.id}`);
+        this.gamepads[gamepad.index] = gamepad;
+    }
+    private onGamepadDisconnected(ev: GamepadEvent) {
+        let gamepad = ev.gamepad;
+        console.log(`Gamepad disconnected! Index: ${gamepad.index}`);
+        delete this.gamepads[gamepad.index];
+    }
+    private updateGamepads() {
+        // refresh gamepad list outside of firefox
+        if (!("ongamepadconnected" in window)) {
+            // get gamepad object and convert it to an array
+            this.gamepads = Object.entries(navigator.getGamepads()).map(([key, value]) => value);
+        }
+    }
+
     public addButton(btn: Button) {
         this.buttons[btn.name] = btn;
     }
-    public removeButton(btn: Button) {
-        delete this.buttons[btn.name];
-    }
     public getButton(btnName: string): Button {
         return this.buttons[btnName];
+    }
+    public removeButton(btn: Button) {
+        delete this.buttons[btn.name];
     }
     public clearButtons() {
         this.buttons = {};
@@ -164,11 +149,9 @@ export class Input {
             if (this.pressedKeys.includes(btn.keybinds[i])) return true;
         }
 
-        if (btn.controllerBind != null && this.gamepads.length > 0) {
-            for (let i = 0; i < this.gamepads.length; i++) {
-                if (this.gamepads[i].buttons[btn.controllerBind].pressed) {
-                    return true;
-                }
+        if (btn.controllerBind != null && this.isGamepadConnected()) {
+            if (this.getGamepad().buttons[btn.controllerBind].pressed) {
+                return true;
             }
         }
 
@@ -176,14 +159,14 @@ export class Input {
     }
 
     public getAxis(): { v: number; h: number } {
-        if (this.gamepads.length > 0) {
-            const deadzone = 0.16;
+        if (this.isGamepadConnected()) {
+            const deadzone = 0.18;
 
             let gamepad = this.getGamepad();
             let ch = gamepad.axes[0];
             let cv = gamepad.axes[1] * -1;
 
-            if ((ch > deadzone && -ch < -deadzone) || (cv > deadzone && -cv < -deadzone)) {
+            if (ch > deadzone || ch < -deadzone || cv > deadzone || cv < -deadzone) {
                 return { v: cv, h: ch };
             }
         }
@@ -196,5 +179,20 @@ export class Input {
         if (this.isButtonDown(Button.left)) axis.h -= 1;
 
         return axis;
+    }
+
+    public isGamepadConnected(): boolean {
+        return this.gamepads.filter((n) => n).length > 0;
+    }
+
+    public getGamepad(): Gamepad {
+        if (this.isGamepadConnected()) {
+            // get first non null element
+            console.log(this.gamepads.find((c) => c != null));
+            return this.gamepads.find((c) => c != null);
+        } else {
+            // TODO: return dummy gamepad
+            return null;
+        }
     }
 }

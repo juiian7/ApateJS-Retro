@@ -17,8 +17,8 @@ entity.set({
         drawlib.text(1, 60, `Action 2 ${apate.input.isButtonDown("action2") ? "true" : "false"}`, Color.white);
         drawlib.text(1, 68, `Cancel ${apate.input.isButtonDown("cancel") ? "true" : "false"}`, Color.white);
 
-        drawlib.text(1, 80, `Axis H ${apate.input.getAxis().h}`, Color.white);
-        drawlib.text(1, 88, `Axis V ${apate.input.getAxis().v}`, Color.white);
+        drawlib.text(1, 80, `Axis H ${apate.input.getAxis().h.toFixed(7)}`, Color.white);
+        drawlib.text(1, 88, `Axis V ${apate.input.getAxis().v.toFixed(7)}`, Color.white);
     },
 });
 
