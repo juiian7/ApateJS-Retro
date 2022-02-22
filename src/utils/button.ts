@@ -5,13 +5,13 @@ export class Button {
     static right = new Button("right", ["KeyD", "ArrowRight"], 15);
     static action1 = new Button("action1", ["KeyZ", "KeyN", "KeyC", "Space"], 0);
     static action2 = new Button("action2", ["KeyX", "KeyM", "KeyV"], 2);
-    static cancel = new Button("cancel", ["Backspace", "ESC"], 1);
+    static cancel = new Button("cancel", ["Backspace", "Escape"], 1);
 
     name: string;
     keybinds: string[];
     controllerBind?: number;
 
-    constructor(name, keybinds, controllerBind?: number) {
+    constructor(name: string, keybinds: string[], controllerBind?: number) {
         this.name = name;
         this.keybinds = keybinds;
         this.controllerBind = controllerBind;

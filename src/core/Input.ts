@@ -12,7 +12,6 @@ interface RegisteredButtons {
     }[];
 }
 
-// TODO: Controller handling
 export class Input {
     private pressedKeys: string[] = [];
     public isMousePressed: boolean = false;
@@ -120,12 +119,20 @@ export class Input {
         }
     }
 
+    public clearRegisteredButtons() {
+        this.registeredButtons = { up: [], down: [] };
+    }
+
     public addButton(btn: Button) {
         this.buttons[btn.name] = btn;
     }
 
     public removeButton(btn: Button) {
         delete this.buttons[btn.name];
+    }
+
+    public getButton(btnName: string): Button {
+        return this.buttons[btnName];
     }
 
     public clearButtons() {
