@@ -31,6 +31,7 @@ export class Transition extends Entity {
             this.index = this.duration;
             this.type = type;
             this.done = res;
+            setTimeout(res, this.duration * 2);
         });
     }
 }

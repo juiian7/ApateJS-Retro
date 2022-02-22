@@ -14,6 +14,10 @@ export class Engine {
     private _cursor: { img?: ImageData; x: number; y: number; scale: number } = { x: 0, y: 0, scale: 1 };
     private _camera: { x: number; y: number } = { x: 0, y: 0 };
 
+    public get screenOffset() {
+        return { x: -this._camera.x, y: this._camera.y };
+    }
+
     protected screen: Screen;
 
     public draw: DrawLib;
@@ -153,7 +157,7 @@ export class Engine {
     }
 
     public camera(x: number, y: number) {
-        this._camera.x = x * -1;
+        this._camera.x = x;
         this._camera.y = y;
     }
 

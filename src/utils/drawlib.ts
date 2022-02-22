@@ -106,9 +106,6 @@ export class DrawLib {
     public text(x: number, y: number, text: string, c: Color, scale: number = 1, leftMargin: number = 1) {
         text = text.toUpperCase();
 
-        x += this._cameraOffsetX;
-        y += this._cameraOffsetY;
-
         for (let i = 0, char; i < text.length; i++) {
             if (text[i] == " ") continue;
             char = this.fontMap[text[i]];
