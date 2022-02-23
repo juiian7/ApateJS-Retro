@@ -2,5 +2,5 @@
     "ignore": ["dist/*"],
     "watch": ["src"],
     "ext": "ts",
-    "exec": "tsc"
+    "exec": "npm run build"
 }
