@@ -15,7 +15,7 @@ export default [
     {
         input: "dist/dts/apate.d.ts",
         output: {
-            file: "dist/index.d.ts",
+            file: "dist/apate.d.ts",
             format: "es",
         },
         plugins: [dts()],
