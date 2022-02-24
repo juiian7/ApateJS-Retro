@@ -109,7 +109,7 @@ var hwEntity = new Entity();
 hwEntity.set({ draw: drawHelloWorld });
 
 // add to the active scene
-apate.activeScene.init(hwEntity);
+apate.activeScene.add(hwEntity);
 
 // or create own scenes
 let scene = new Scene();
@@ -130,7 +130,7 @@ class HelloWorld extends Entity {
 
 var hwEntity = new HelloWorld();
 
-apate.activeScene.init(hwEntity);
+apate.activeScene.add(hwEntity);
 ```
 
 ## Screen Draw Functions
