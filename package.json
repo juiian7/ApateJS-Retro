@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "A simple 2D retro game engine which runs directly in your browser",
   "main": "dist/apate.js",
+  "typings": "dist/apate.d.ts",
   "scripts": {
     "build": "rollup --config rollup.config.js",
     "dev": "nodemon --config nodemon.json",
