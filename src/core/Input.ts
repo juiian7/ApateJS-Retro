@@ -4,13 +4,15 @@ import { Screen } from "./Screen.js";
 interface RegisteredButtons {
     up: {
         btn: Button;
-        action: () => void;
+        action: (ev?: ButtonPressEvent) => void;
     }[];
     down: {
         btn: Button;
-        action: () => void;
+        action: (ev?: ButtonPressEvent) => void;
     }[];
 }
+
+type ButtonPressEvent = KeyboardEvent | null;
 
 export class Input {
     private _screen: Screen;
@@ -51,11 +53,13 @@ export class Input {
 
     private onKeyDown(ev: KeyboardEvent) {
         this.pressedKeys.push(ev.code);
-        this.runRegisteredActions("down", ev.code);
+        this.runRegisteredActions("down", "keyboard", ev);
+        this.runRegisteredActions("down", ev.code, ev);
     }
     private onKeyUp(ev: KeyboardEvent) {
         this.pressedKeys = this.pressedKeys.filter((code) => code != ev.code);
-        this.runRegisteredActions("up", ev.code);
+        this.runRegisteredActions("up", "keyboard", ev);
+        this.runRegisteredActions("up", ev.code, ev);
     }
 
     private onMouseDown(ev: MouseEvent) {
@@ -86,27 +90,27 @@ export class Input {
         this.mousePos.y = Math.floor(ev.touches[0].pageY / this._screen.scale);
     }
 
-    public on(btn: Button | "mouse" | string, ev: "up" | "down", action: () => void) {
+    public on(btn: Button | "mouse" | "keyboard" | string, type: "up" | "down", action: (ev?: ButtonPressEvent) => void) {
         if (typeof btn == "string") {
-            this.registeredButtons[ev].push({ btn: new Button(btn, [btn]), action });
+            this.registeredButtons[type].push({ btn: new Button(btn, [btn]), action });
         } else {
-            this.registeredButtons[ev].push({ btn, action });
+            this.registeredButtons[type].push({ btn, action });
         }
     }
     public clearRegisteredButtons() {
         this.registeredButtons = { up: [], down: [] };
     }
-    private runRegisteredActions(ev: "down" | "up", key: string) {
-        for (let i = 0; i < this.registeredButtons[ev].length; i++) {
-            if (this.registeredButtons[ev][i].btn.keybinds.includes(key)) {
-                this.registeredButtons[ev][i].action();
+    private runRegisteredActions(type: "down" | "up", key: string, ev?: ButtonPressEvent) {
+        for (let i = 0; i < this.registeredButtons[type].length; i++) {
+            if (this.registeredButtons[type][i].btn.keybinds.includes(key)) {
+                this.registeredButtons[type][i].action(ev);
             }
         }
     }
-    private runRegisteredGamepadActions(ev: "down" | "up", btnBind: number) {
-        for (let i = 0; i < this.registeredButtons[ev].length; i++) {
-            if (this.registeredButtons[ev][i].btn.controllerBind === btnBind) {
-                this.registeredButtons[ev][i].action();
+    private runRegisteredGamepadActions(type: "down" | "up", btnBind: number) {
+        for (let i = 0; i < this.registeredButtons[type].length; i++) {
+            if (this.registeredButtons[type][i].btn.controllerBind === btnBind) {
+                this.registeredButtons[type][i].action();
             }
         }
     }

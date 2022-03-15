@@ -48,12 +48,55 @@ export class DrawLib {
         this.screen.setPixel(x + this._cameraOffsetX, y + this._cameraOffsetY, c.r, c.g, c.b);
     }
 
-    public rect(x: number, y: number, w: number, h: number, c: Color) {
-        for (let i = 0; i < w; i++) {
-            for (let j = 0; j < h; j++) {
-                this.screen.setPixel(i + x + this._cameraOffsetX, j + y + this._cameraOffsetY, c.r, c.g, c.b);
+    public pixelArr(x: number, y: number, c: Color, pixels: { x: number; y: number; c?: Color }[]) {
+        for (let i = 0; i < pixels.length; i++) {
+            this.pixel(x + pixels[i].x, y + pixels[i].y, pixels[i].c ?? c);
+        }
+    }
+
+    public rect(x: number, y: number, w: number, h: number, c: Color, filled: boolean = true) {
+        if (filled) {
+            for (let i = 0; i < w; i++) {
+                for (let j = 0; j < h; j++) {
+                    this.pixel(i + x, j + y, c);
+                }
+            }
+        } else {
+            this.line(x, y, x + w - 1, y, c);
+            this.line(x, y + h, x + w - 1, y + h, c);
+            this.line(x, y, x, y + h, c);
+            this.line(x + w - 1, y, x + w - 1, y + h - 1, c);
+        }
+    }
+
+    private consoleCahe: string[] = [];
+    private log(str: string) {
+        if (!this.consoleCahe.includes(str)) {
+            this.consoleCahe.push(str);
+            console.log(str);
+        }
+    }
+
+    public line(x1: number, y1: number, x2: number, y2: number, c: Color) {
+        let dx = x2 - x1;
+        let dy = y2 - y1;
+        if (x2 > x1) {
+            let k = dy / dx;
+            this.log(`1 X1:${x1} X2:${x2} dy(${dy}) / dx(${dx}) = k(${k})`);
+            for (let x = 0; dx >= 0 ? x < dx : x > dx; dx >= 0 ? x++ : x--) {
+                this.pixel(x + x1, Math.round(k * x) + y1, c);
+            }
+        } else {
+            let k = dx / dy;
+            this.log(`2 X1:${x1} X2:${x2} dy(${dy}) / dx(${dx}) = k(${k})`);
+            for (let y = 0; dy >= 0 ? y < dy : y > dy; dy >= 0 ? y++ : y--) {
+                this.pixel(Math.round(k * y) + x1, y + y1, c);
             }
         }
+
+        // draw begin and end to avoid ignoring those due to rounding
+        this.pixel(x1, y1, c);
+        this.pixel(x2, y2, c);
     }
 
     public sprite(x: number, y: number, sprite: Sprite) {

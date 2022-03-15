@@ -5,6 +5,7 @@ export { Input } from "./core/Input.js";
 export { ParticleSystem, Particle } from "./core/ParticleSystem.js";
 export { Scene } from "./core/Scene.js";
 export { Transition } from "./core/Transition.js";
+export * as UI from "./core/Window.js";
 
 // ./utils/ modules
 export { Button } from "./utils/button.js";
