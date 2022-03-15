@@ -5,10 +5,12 @@
   "main": "dist/apate.js",
   "typings": "dist/apate.d.ts",
   "scripts": {
-    "build": "rollup --config rollup.config.js",
+    "build": "rimraf dist/ && rollup --config rollup.config.js",
+    "build/dev": "rollup --config rollup.config.js --environment BUILD:development",
+    "clean": "rimraf dist/",
     "dev": "nodemon --config nodemon.json",
-    "test": "eslint src/**/*.ts && prettier --check \"src/**/*.ts\"",
-    "format": "prettier src/**/*.ts -w"
+    "test": "eslint src/**/*.ts && prettier src/**/*.ts --check",
+    "format": "prettier src/**/*.ts --write"
   },
   "repository": {
     "type": "git",
@@ -23,6 +25,7 @@
     "eslint": "^8.9.0",
     "nodemon": "^2.0.15",
     "prettier": "^2.5.1",
+    "rimraf": "^3.0.2",
     "rollup": "^2.68.0",
     "rollup-plugin-dts": "^4.1.0",
     "typescript": "4.4.4"
@@ -30,7 +33,7 @@
   "prettier": {
     "singleQuote": false,
     "tabWidth": 4,
-    "printWidth": 200,
+    "printWidth": 180,
     "trailingComma": "es5",
     "endOfLine": "auto"
   }
