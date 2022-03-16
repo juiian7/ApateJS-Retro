@@ -67,26 +67,16 @@ export class DrawLib {
         }
     }
 
-    private consoleCahe: string[] = [];
-    private log(str: string) {
-        if (!this.consoleCahe.includes(str)) {
-            this.consoleCahe.push(str);
-            console.log(str);
-        }
-    }
-
     public line(x1: number, y1: number, x2: number, y2: number, c: Color) {
         let dx = x2 - x1;
         let dy = y2 - y1;
         if (Math.abs(dx) > Math.abs(dy)) {
             let k = dy / dx;
-            this.log(`1 (${x1}, ${y1}, ${x2}, ${y2})\tdy(${dy}) / dx(${dx}) = k(${k})`);
             for (let x = 0; dx >= 0 ? x < dx : x > dx; dx >= 0 ? x++ : x--) {
                 this.pixel(x + x1, Math.round(k * x) + y1, c);
             }
         } else {
             let k = dx / dy;
-            this.log(`2 (${x1}, ${y1}, ${x2}, ${y2})\tdx(${dx}) / dy(${dy}) = k(${k})`);
             for (let y = 0; dy >= 0 ? y < dy : y > dy; dy >= 0 ? y++ : y--) {
                 this.pixel(Math.round(k * y) + x1, y + y1, c);
             }

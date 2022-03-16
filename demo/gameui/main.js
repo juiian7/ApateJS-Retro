@@ -20,32 +20,11 @@ demoUI.addComponent(input);
 let dropDown = new UI.OptionSelection(6, 36, ["Test1", "Test2", "Hello World"], 1);
 demoUI.addComponent(dropDown);
 
-let first = false;
-
 var entity = new Entity();
 entity.set({
     draw: function (draw) {
         draw.text(1, 112, `Mouse X ${apate.input.mousePos.x}`, Color.white);
         draw.text(1, 120, `Mouse Y ${apate.input.mousePos.y}`, Color.white);
-        if (!first) {
-            console.log("---------------------------------------");
-        }
-        draw.line(50, 90, 5, 75, Color.agua);
-        draw.line(50, 90, 50, 75, Color.agua);
-        draw.line(50, 90, 90, 75, Color.agua);
-        draw.line(50, 90, 90, 90, Color.agua);
-        draw.line(50, 90, 90, 105, Color.agua);
-        draw.line(50, 90, 50, 105, Color.agua);
-        draw.line(50, 90, 5, 105, Color.agua);
-        draw.line(50, 90, 5, 90, Color.agua);
-
-        if (!first) {
-            console.log("---------------------------------------");
-            first = true;
-        }
-
-        draw.line(125, 75, 100, 105, Color.agua);
-        draw.line(100, 75, 125, 90, Color.agua);
     },
 });
 

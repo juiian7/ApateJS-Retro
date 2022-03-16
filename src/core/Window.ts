@@ -92,7 +92,6 @@ export class Window extends Entity {
             { x: 2, y: 2 },
         ]);
         this.titleBarCloseBtn.onClick = () => {
-            console.log("Closing Window...");
             this.hide();
         };
         this.addComponent(this.titleBarCloseBtn);
@@ -105,7 +104,6 @@ export class Window extends Entity {
 
             if (this.showTitleBar) {
                 if (rx < this.width && ry >= 0 && ry <= 4) {
-                    console.log(`Title bar held`);
                     this.titleBarHeld = true;
                     this.titleBarHeldPrev = { ...this.apate.input.mousePos };
                 }
