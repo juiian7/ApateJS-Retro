@@ -78,15 +78,15 @@ export class DrawLib {
     public line(x1: number, y1: number, x2: number, y2: number, c: Color) {
         let dx = x2 - x1;
         let dy = y2 - y1;
-        if (x2 > x1) {
+        if (Math.abs(dx) > Math.abs(dy)) {
             let k = dy / dx;
-            //this.log(`1 X1:${x1} X2:${x2} dy(${dy}) / dx(${dx}) = k(${k})`);
+            this.log(`1 (${x1}, ${y1}, ${x2}, ${y2})\tdy(${dy}) / dx(${dx}) = k(${k})`);
             for (let x = 0; dx >= 0 ? x < dx : x > dx; dx >= 0 ? x++ : x--) {
                 this.pixel(x + x1, Math.round(k * x) + y1, c);
             }
         } else {
             let k = dx / dy;
-            //this.log(`2 X1:${x1} X2:${x2} dy(${dy}) / dx(${dx}) = k(${k})`);
+            this.log(`2 (${x1}, ${y1}, ${x2}, ${y2})\tdx(${dx}) / dy(${dy}) = k(${k})`);
             for (let y = 0; dy >= 0 ? y < dy : y > dy; dy >= 0 ? y++ : y--) {
                 this.pixel(Math.round(k * y) + x1, y + y1, c);
             }
