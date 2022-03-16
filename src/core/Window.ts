@@ -104,7 +104,7 @@ export class Window extends Entity {
             let ry = Math.floor(this.apate.input.mousePos.y - this.y);
 
             if (this.showTitleBar) {
-                if (rx < this.width && ry <= 4) {
+                if (rx < this.width && ry >= 0 && ry <= 4) {
                     console.log(`Title bar held`);
                     this.titleBarHeld = true;
                     this.titleBarHeldPrev = { ...this.apate.input.mousePos };
