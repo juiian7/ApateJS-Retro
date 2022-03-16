@@ -1,8 +1,8 @@
 import { Screen } from "../core/Screen";
 import { Color } from "./color.js";
-import { spritelib } from "./spritelib.js";
+import { Sprite, spritelib } from "./spritelib.js";
 
-type Sprite = ImageData;
+export type PixelArray = { x: number; y: number; c?: Color }[];
 
 export class DrawLib {
     private screen: Screen;
@@ -20,12 +20,12 @@ export class DrawLib {
         this._cameraOffsetX = x;
         this._cameraOffsetY = y;
     }
+    public getOffset(): { x: number; y: number } {
+        return { x: this._cameraOffsetX, y: this._cameraOffsetY };
+    }
 
     public async loadFont(url: string, characters: string, charWidth: number) {
-        let data: Sprite;
-
-        data = await spritelib.load(url);
-
+        let data: Sprite = await spritelib.load(url);
         let chars = spritelib.split(data, charWidth, data.height, 0);
 
         if (chars.length != characters.length) console.error("Characters do not match with image!");
@@ -40,15 +40,13 @@ export class DrawLib {
             }
             this.fontMap[characters[i]] = chars[i];
         }
-
-        console.log(this.fontMap);
     }
 
     public pixel(x: number, y: number, c: Color) {
         this.screen.setPixel(x + this._cameraOffsetX, y + this._cameraOffsetY, c.r, c.g, c.b);
     }
 
-    public pixelArr(x: number, y: number, c: Color, pixels: { x: number; y: number; c?: Color }[]) {
+    public pixelArr(x: number, y: number, c: Color, pixels: PixelArray) {
         for (let i = 0; i < pixels.length; i++) {
             this.pixel(x + pixels[i].x, y + pixels[i].y, pixels[i].c ?? c);
         }
@@ -82,13 +80,13 @@ export class DrawLib {
         let dy = y2 - y1;
         if (x2 > x1) {
             let k = dy / dx;
-            this.log(`1 X1:${x1} X2:${x2} dy(${dy}) / dx(${dx}) = k(${k})`);
+            //this.log(`1 X1:${x1} X2:${x2} dy(${dy}) / dx(${dx}) = k(${k})`);
             for (let x = 0; dx >= 0 ? x < dx : x > dx; dx >= 0 ? x++ : x--) {
                 this.pixel(x + x1, Math.round(k * x) + y1, c);
             }
         } else {
             let k = dx / dy;
-            this.log(`2 X1:${x1} X2:${x2} dy(${dy}) / dx(${dx}) = k(${k})`);
+            //this.log(`2 X1:${x1} X2:${x2} dy(${dy}) / dx(${dx}) = k(${k})`);
             for (let y = 0; dy >= 0 ? y < dy : y > dy; dy >= 0 ? y++ : y--) {
                 this.pixel(Math.round(k * y) + x1, y + y1, c);
             }
