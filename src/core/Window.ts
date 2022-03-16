@@ -216,6 +216,13 @@ export abstract class WindowComponent {
     public width: number;
     public height: number;
 
+    constructor(x: number, y: number, width: number, height: number) {
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+    }
+
     public backColor: Color;
     public frontColor: Color;
     public markedBackColor: Color;
@@ -252,7 +259,7 @@ export enum TextAlignment {
     RIGHT,
 }
 
-// TODO Input blink?
+// TODO Input, blink?
 export class ClickableButton extends WindowComponent {
     private text: string;
     private pixelArr: PixelArray;
@@ -261,12 +268,9 @@ export class ClickableButton extends WindowComponent {
     public onClick: () => void | null;
 
     constructor(x, y, width, height, displayObj?: string | PixelArray | Sprite) {
-        super();
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
+        super(x, y, width, height);
         this.setColors(Color.blue, Color.black);
+
         if (displayObj != null) {
             this.setDisplay(displayObj);
         }
@@ -308,26 +312,22 @@ export class ClickableButton extends WindowComponent {
     }
 }
 
-export enum InputFieldAcceptedValues {
+export enum TextInputType {
     ALL,
     NUMBERS,
     LETTERS,
 }
 
 export class InputField extends WindowComponent {
-    public acceptedValues: InputFieldAcceptedValues;
+    public acceptedValues: TextInputType;
     public text: string;
 
-    constructor(x, y, width, height?: number, text?: string, acceptedValues?: InputFieldAcceptedValues) {
-        super();
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height ?? 9;
-        this.text = text ?? "";
-        this.acceptedValues = acceptedValues ?? InputFieldAcceptedValues.ALL;
-
+    constructor(x, y, width, height?: number, text?: string, acceptedValues?: TextInputType) {
+        super(x, y, width, height ?? 9);
         this.setColors(Color.black, Color.white);
+
+        this.text = text ?? "";
+        this.acceptedValues = acceptedValues ?? TextInputType.ALL;
     }
 
     draw(draw: DrawLib): void {
@@ -351,14 +351,14 @@ export class InputField extends WindowComponent {
 
     private isInputAccepted(ev: KeyboardEvent): boolean {
         switch (this.acceptedValues) {
-            case InputFieldAcceptedValues.ALL:
+            case TextInputType.ALL:
                 return ev.which === 32 || (ev.which >= 48 && ev.which <= 90) || (ev.which >= 96 && ev.which <= 111) || (ev.which >= 186 && ev.which <= 222);
-            case InputFieldAcceptedValues.NUMBERS:
+            case TextInputType.NUMBERS:
                 return (ev.which >= 48 && ev.which <= 57) || (ev.which >= 96 && ev.which <= 111);
-            case InputFieldAcceptedValues.LETTERS:
+            case TextInputType.LETTERS:
                 return ev.which >= 58 && ev.which <= 90;
             default:
-                break;
+                return true;
         }
     }
 }
@@ -368,16 +368,11 @@ export class OptionSelection extends WindowComponent {
     public selectedOption: number;
 
     constructor(x, y, options: string[], selectedIndex?: number) {
-        super();
-        this.x = x;
-        this.y = y;
-        this.width = 0;
-        this.height = 7;
+        super(x, y, 0, 7);
+        this.setColors(null, Color.black);
 
         this.options = options ?? [];
         this.selectedOption = selectedIndex ?? 0;
-
-        this.setColors(null, Color.black);
     }
 
     draw(draw: DrawLib): void {
@@ -435,18 +430,13 @@ export class NumericOption extends WindowComponent {
     public maxValue: number;
 
     constructor(x, y, text, value, minValue = 0, maxValue = 100) {
-        super();
-        this.x = x;
-        this.y = y;
-        this.width = 0;
-        this.height = 7;
+        super(x, y, 0, 7);
+        this.setColors(Color.white, Color.black);
 
         this.text = text;
         this.value = value;
         this.minValue = minValue;
         this.maxValue = maxValue;
-
-        this.setColors(Color.white, Color.black);
     }
 
     draw(draw: DrawLib): void {

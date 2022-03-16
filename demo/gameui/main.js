@@ -4,7 +4,7 @@ const apate = new Apate();
 apate.showInfo = true;
 apate.drawCursor = true;
 
-var demoUI = new UI.Window(10, 10, 80, 70, Color.white, true);
+var demoUI = new UI.Window(10, 10, 80, 60, Color.white, true);
 let button = new UI.ClickableButton(6, 2, 42, 9, "Button");
 button.onClick = () => {
     console.log("Click");
