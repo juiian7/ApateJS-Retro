@@ -81,20 +81,22 @@ export class Window extends Entity {
     }
 
     init(): void {
-        // move close button to the right on macos :)
-        this.titleBarCloseBtn = new ClickableButton(this.apate.isHostAMac ? 1 : this.width - 4, -4, 3, 3);
-        this.titleBarCloseBtn.setColors(null, Color.dark_indigo);
-        this.titleBarCloseBtn.setDisplay([
-            { x: 0, y: 0 },
-            { x: 0, y: 2 },
-            { x: 1, y: 1 },
-            { x: 2, y: 0 },
-            { x: 2, y: 2 },
-        ]);
-        this.titleBarCloseBtn.onClick = () => {
-            this.hide();
-        };
-        this.addComponent(this.titleBarCloseBtn);
+        if (this.showTitleBar) {
+            // move close button to the right on macos :)
+            this.titleBarCloseBtn = new ClickableButton(this.apate.isHostAMac ? 1 : this.width - 4, -4, 3, 3);
+            this.titleBarCloseBtn.setColors(null, Color.dark_indigo);
+            this.titleBarCloseBtn.setDisplay([
+                { x: 0, y: 0 },
+                { x: 0, y: 2 },
+                { x: 1, y: 1 },
+                { x: 2, y: 0 },
+                { x: 2, y: 2 },
+            ]);
+            this.titleBarCloseBtn.onClick = () => {
+                this.hide();
+            };
+            this.addComponent(this.titleBarCloseBtn);
+        }
 
         this.apate.input.on("mouse", "down", () => {
             if (!this.visable) return;
@@ -370,7 +372,14 @@ export class OptionSelection extends WindowComponent {
         this.setColors(null, Color.black);
 
         this.options = options ?? [];
-        this.selectedOption = selectedIndex ?? 0;
+
+        if (selectedIndex >= this.options.length) {
+            this.selectedOption = this.options.length - 1;
+        } else if (selectedIndex < 0) {
+            this.selectedOption = 0;
+        } else {
+            this.selectedOption = selectedIndex ?? 0;
+        }
     }
 
     draw(draw: DrawLib): void {
@@ -389,22 +398,22 @@ export class OptionSelection extends WindowComponent {
 
     mouseDown(x: number, y: number): void {
         if (x <= 3 && y <= 6) {
-            this.cycleOption(false);
+            this.cycleOptions(false);
         } else if (this.width - x <= 4 && this.height - y <= 7) {
-            this.cycleOption(true);
+            this.cycleOptions(true);
         }
     }
 
     keyDown(ev: KeyboardEvent): void {
         const code = ev.code;
         if (code === "ArrowLeft" || code === "KeyA") {
-            this.cycleOption(false);
+            this.cycleOptions(false);
         } else if (code === "ArrowRight" || code === "KeyD") {
-            this.cycleOption(true);
+            this.cycleOptions(true);
         }
     }
 
-    private cycleOption(increase: boolean) {
+    private cycleOptions(increase: boolean) {
         if (increase) {
             if (this.selectedOption < this.options.length - 1) {
                 this.selectedOption++;
