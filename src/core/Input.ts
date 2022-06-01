@@ -102,7 +102,10 @@ export class Input {
     }
     private runRegisteredActions(type: "down" | "up", key: string, ev?: ButtonPressEvent) {
         for (let i = 0; i < this.registeredButtons[type].length; i++) {
-            if (this.registeredButtons[type][i].btn.keybinds.includes(key)) {
+            let btn = this.registeredButtons[type][i].btn;
+            if (btn.keybinds.includes(key)) {
+                if (btn.shiftKey != null && ((btn.shiftKey === false && ev?.shiftKey === true) || (btn.shiftKey === true && ev?.shiftKey === false))) continue;
+                if (btn.ctrlKey != null && ((btn.ctrlKey === false && ev?.ctrlKey === true) || (btn.ctrlKey === true && ev?.ctrlKey === false))) continue;
                 this.registeredButtons[type][i].action(ev);
             }
         }
@@ -126,7 +129,7 @@ export class Input {
         delete this.gamepads[gamepad.index];
     }
     private updateGamepads() {
-        // refresh gamepad list outside of firefox
+        // refresh gamepad list outside of Firefox
         if (!("ongamepadconnected" in window)) {
             // get gamepad object and convert it to an array
             this.gamepads = Object.entries(navigator.getGamepads()).map(([key, value]) => value);

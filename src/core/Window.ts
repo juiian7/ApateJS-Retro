@@ -1,7 +1,7 @@
 import { DrawLib, PixelArray } from "../utils/drawlib.js";
 import { Color } from "../utils/color.js";
 import { Button } from "../utils/button.js";
-import { Sprite } from "../utils/spritelib";
+import { Sprite } from "../utils/spritelib.js";
 import { Entity } from "./Entity.js";
 import { Engine } from "./Engine.js";
 
@@ -11,7 +11,7 @@ export class Window extends Entity {
     private width: number;
     private height: number;
     private color: Color;
-    private visable: boolean;
+    private visible: boolean;
 
     private showTitleBar: boolean;
     private titleBarCloseBtn: ClickableButton;
@@ -49,7 +49,7 @@ export class Window extends Entity {
 
         this.titleBarHeld = false;
         this.titleBarHeldPrev = null;
-        this.visable = false;
+        this.visible = false;
 
         this.components = [];
         this._selectedIndex = -1;
@@ -61,10 +61,10 @@ export class Window extends Entity {
     }
 
     public show() {
-        this.visable = true;
+        this.visible = true;
     }
     public hide() {
-        this.visable = false;
+        this.visible = false;
         this.selectedIndex = -1;
     }
 
@@ -99,7 +99,7 @@ export class Window extends Entity {
         }
 
         this.apate.input.on("mouse", "down", () => {
-            if (!this.visable) return;
+            if (!this.visible) return;
 
             let rx = Math.floor(this.apate.input.mousePos.x - this.x);
             let ry = Math.floor(this.apate.input.mousePos.y - this.y);
@@ -122,7 +122,7 @@ export class Window extends Entity {
             }
         });
         this.apate.input.on("mouse", "up", () => {
-            if (!this.visable) return;
+            if (!this.visible) return;
 
             if (this.showTitleBar && this.titleBarHeld) {
                 this.titleBarHeld = false;
@@ -138,16 +138,16 @@ export class Window extends Entity {
         });
 
         this.apate.input.on("keyboard", "down", (ev: KeyboardEvent) => {
-            if (!this.visable) return;
+            if (!this.visible) return;
             this.components[this.selectedIndex]?.keyDown?.(ev);
         });
         this.apate.input.on("keyboard", "up", (ev: KeyboardEvent) => {
-            if (!this.visable) return;
+            if (!this.visible) return;
             this.components[this.selectedIndex]?.keyUp?.(ev);
         });
 
-        this.apate.input.on("Tab", "down", (ev: KeyboardEvent) => {
-            if (!this.visable) return;
+        this.apate.input.on(new Button("Tab", ["Tab"], null, false), "down", (ev: KeyboardEvent) => {
+            if (!this.visible) return;
 
             ev.preventDefault();
             if (this.selectedIndex < this.components.length - 1) {
@@ -156,14 +156,24 @@ export class Window extends Entity {
                 this.selectedIndex = 0;
             }
         });
+        this.apate.input.on(new Button("ShiftTab", ["Tab"], null, true), "down", (ev: KeyboardEvent) => {
+            if (!this.visible) return;
+
+            ev.preventDefault();
+            if (this.selectedIndex > 0) {
+                this.selectedIndex--;
+            } else {
+                this.selectedIndex = this.components.length - 1;
+            }
+        });
         this.apate.input.on(Button.down, "down", () => {
-            if (!this.visable) return;
+            if (!this.visible) return;
             if (this.selectedIndex < this.components.length - 1) {
                 this.selectedIndex++;
             }
         });
         this.apate.input.on(Button.up, "down", () => {
-            if (!this.visable) return;
+            if (!this.visible) return;
             if (this.selectedIndex > 0) {
                 this.selectedIndex--;
             }
@@ -171,7 +181,7 @@ export class Window extends Entity {
     }
 
     draw(draw: DrawLib): void {
-        if (!this.visable) return;
+        if (!this.visible) return;
 
         let prevOffset = draw.getOffset();
         draw.setOffset(0, 0);
@@ -196,7 +206,7 @@ export class Window extends Entity {
     }
 
     update(delta: number): void {
-        if (!this.visable) return;
+        if (!this.visible) return;
 
         if (this.showTitleBar && this.titleBarHeld) {
             this.x = this.x + this.apate.input.mousePos.x - this.titleBarHeldPrev.x;
@@ -294,8 +304,8 @@ export class ClickableButton extends WindowComponent {
         }
 
         if (this.text != null) {
-            let textlength = draw.measureText(this.text);
-            let tx = Math.round(this.x + (this.width - textlength) / 2);
+            let textLength = draw.measureText(this.text);
+            let tx = Math.round(this.x + (this.width - textLength) / 2);
             let ty = Math.round(this.y + (this.height - 5) / 2);
             draw.text(tx, ty, this.text, this.frontColor);
         }
@@ -335,8 +345,8 @@ export class InputField extends WindowComponent {
             draw.rect(this.x, this.y, this.width, this.height, this.backColor);
         }
 
-        let textlength = draw.measureText(this.text);
-        let tx = Math.round(this.x + (this.width - textlength) / 2);
+        let textLength = draw.measureText(this.text);
+        let tx = Math.round(this.x + (this.width - textLength) / 2);
         let ty = Math.round(this.y + (this.height - 5) / 2);
         draw.text(tx, ty, this.text, this.frontColor);
     }
