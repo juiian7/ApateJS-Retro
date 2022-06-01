@@ -4,6 +4,9 @@ const apate = new Apate();
 apate.showInfo = true;
 apate.drawCursor = true;
 
+var btnShiftA = new Button("shifta", ["KeyA"], null, true);
+apate.input.addButton(btnShiftA);
+
 var entity = new Entity();
 entity.set({
     draw: function (drawlib) {
@@ -17,9 +20,11 @@ entity.set({
 
         drawlib.text(1, 80, `Axis H ${apate.input.getAxis().h.toFixed(7)}`, Color.white);
         drawlib.text(1, 88, `Axis V ${apate.input.getAxis().v.toFixed(7)}`, Color.white);
-        
+
         drawlib.text(1, 100, `Mouse X ${apate.input.mousePos.x}`, Color.white);
         drawlib.text(1, 108, `Mouse Y ${apate.input.mousePos.y}`, Color.white);
+
+        drawlib.text(1, 120, `Shift+A ${apate.input.isButtonDown(btnShiftA)}`, Color.white);
     },
 });
 
