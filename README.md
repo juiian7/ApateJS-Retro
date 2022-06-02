@@ -11,9 +11,9 @@ A simple 2D retro game engine which runs directly in your browser.
 
 ## Projects that use ApateJS
 
-| Name    | Play at                                  | Source Link                                   |
-| ------- | ---------------------------------------- | --------------------------------------------- |
-| Hogruta | [itch.io](https://zupajul.itch.io/hogruta)       | [GitHub](https://github.com/juiian7/hogruta)  |
+| Name       | Play at                                          | Source Link                                   |
+| ---------- | ------------------------------------------------ | --------------------------------------------- |
+| Hogruta    | [itch.io](https://zupajul.itch.io/hogruta)       | [GitHub](https://github.com/juiian7/hogruta)  |
 | Roadrunner | [github.io](https://l1ino.github.io/Roadrunner/) | [GitHub](https://github.com/l1ino/Roadrunner) |
 
 ## Usage
@@ -52,9 +52,9 @@ apate.run();
 
 ## Scenes and Entities
 
-Scenes are basicly just collections of entities.
+Scenes are basically just collections of entities.
 
-Enities can overwrite events which are needed to run a game.
+Entities can overwrite events which are needed to run a game.
 
 ## Entity Events
 
@@ -64,7 +64,7 @@ There are a few events called, which will help to run your game:
 | `init` | Once an entity is added to a scene | - |
 | `update` | Called every frame | delta: `number` (Time since last call) |
 | `draw` | Called every frame | drawlib (used to draw to screen) |
-| `destroy` | - Not automaticly called - | -
+| `destroy` | - Not automatically called - | -
 
 Register events like this:
 
@@ -76,7 +76,7 @@ entity.set({
 // or
 entity.on('update', function(delta) { ... });
 
-// or (recomended for games with multiple entities)
+// or (recommended for games with multiple entities)
 class MyEntity extends Entity {
     update(delta) { ... }
 }
@@ -88,11 +88,11 @@ entity.update = function() { ... }
 
 **NOTE:**
 
-Normaly the functions get bound. Use `this.` to access all associated properties. When setting it directly you may bind `this` youself.
+Normally the functions get bound. Use `this.` to access all associated properties. When setting it directly you may bind `this` yourself.
 
 New events with own names like `physicUpdate` can also be created. Make sure `allowOwnEvents` is set to `true` in when the constructor is called.
 
-When an entity is executed by apate throught a scene, access `this.apate` to get the current running instance.
+When an entity is executed by apate through a scene, access `this.apate` to get the current running instance.
 
 ```js
 var entity = new Entity({ allowOwnEvents: true });
@@ -125,7 +125,7 @@ scene.init(hwEntity);
 apate.activeScene = scene;
 ```
 
-As mentioned before, the Enity class can be extended to make it more comfortable to write entities:
+As mentioned before, the Entity class can be extended to make it more comfortable to write entities:
 
 ```js
 class HelloWorld extends Entity {
@@ -157,7 +157,7 @@ apate.drawlib.line(startX, startY, endX, endY, color);
 // draw sprite
 apate.drawlib.sprite(x, y, sprite);
 
-// draw exteded sprite
+// draw extended sprite
 apate.drawlib.spriteExt(x, y, sprite, scale, color);
 
 // draw text
@@ -201,7 +201,7 @@ if (apate.input.isButtonPressed("jump")) {
 }
 
 apate.input.on(btn, "down", () => {
-    // button "jump" got triggerd
+    // button "jump" got triggered
 });
 
 // get horizontal and vertical axis (mapped to keys ("up","down","left", "right") and controller stick axis)
@@ -232,7 +232,7 @@ cancel is mapped to the controllers second button (PS: O, XBox: B)
 
 ## Particle System
 
-The ParticleSystem is an Enitiy object which handles multiple entity simulations.
+The ParticleSystem is an Entity object which handles multiple entity simulations.
 
 Control particles by overwriting the `generateParticle` function.
 
