@@ -7,14 +7,18 @@ export class Button {
     static action2 = new Button("action2", ["KeyX", "KeyM", "KeyV"], 2);
     static cancel = new Button("cancel", ["Backspace", "Escape"], 1);
 
-    name: string;
-    keybinds: string[];
-    controllerBind?: number;
+    public name: string;
+    public keybinds: string[];
+    public controllerBind: number | null;
+    public shiftKey: boolean | null;
+    public ctrlKey: boolean | null;
 
-    constructor(name: string, keybinds: string[], controllerBind?: number) {
+    constructor(name: string, keybinds: string[], controllerBind?: number, shiftKey?: boolean, ctrlKey?: boolean) {
         this.name = name;
-        this.keybinds = keybinds;
-        this.controllerBind = controllerBind;
+        this.keybinds = keybinds ?? [];
+        this.controllerBind = controllerBind ?? null;
+        this.shiftKey = shiftKey ?? null;
+        this.ctrlKey = ctrlKey ?? null;
     }
 
     public addKeybind(key: string) {
@@ -23,6 +27,8 @@ export class Button {
 
     public removeKeybind(key: string) {
         let i = this.keybinds.indexOf(key);
-        if (i > -1) this.keybinds.splice(i, 1);
+        if (i > -1) {
+            this.keybinds.splice(i, 1);
+        }
     }
 }
