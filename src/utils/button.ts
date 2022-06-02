@@ -9,16 +9,16 @@ export class Button {
 
     public name: string;
     public keybinds: string[];
-    public controllerBind?: number;
+    public controllerBind: number | null;
     public shiftKey: boolean | null;
     public ctrlKey: boolean | null;
 
-    constructor(name: string, keybinds: string[], controllerBind?: number, shiftKey = null, ctrlKey = null) {
+    constructor(name: string, keybinds: string[], controllerBind?: number, shiftKey?: boolean, ctrlKey?: boolean) {
         this.name = name;
-        this.keybinds = keybinds;
-        this.controllerBind = controllerBind;
-        this.shiftKey = shiftKey;
-        this.ctrlKey = ctrlKey;
+        this.keybinds = keybinds ?? [];
+        this.controllerBind = controllerBind ?? null;
+        this.shiftKey = shiftKey ?? null;
+        this.ctrlKey = ctrlKey ?? null;
     }
 
     public addKeybind(key: string) {
@@ -27,6 +27,8 @@ export class Button {
 
     public removeKeybind(key: string) {
         let i = this.keybinds.indexOf(key);
-        if (i > -1) this.keybinds.splice(i, 1);
+        if (i > -1) {
+            this.keybinds.splice(i, 1);
+        }
     }
 }
