@@ -67,7 +67,7 @@ export default class Apate {
 
     public colors = Color;
 
-    public keyMap = defaultkeyMap;
+    public keyMap = defaultKeyMap;
 
     public set activeScene(val: Scene) {
         this._activeScene = val;
@@ -207,7 +207,7 @@ export class Entity {
     draw(draw) {}
 }
 
-const defaultkeyMap = {
+const defaultKeyMap = {
     up: ["KeyW", "ArrowUp"],
     down: ["KeyS", "ArrowDown"],
     left: ["KeyA", "ArrowLeft"],
