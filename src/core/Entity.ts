@@ -23,7 +23,7 @@ const defaultConfig: EntityConfig = {
 export class Entity {
     // init called from scene after entity is appended
     public isInitialized: boolean = false;
-    // after init scene sets acitve engine
+    // after init scene sets active engine
     public apate?: Engine;
 
     public doUpdate: boolean = true;

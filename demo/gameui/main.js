@@ -4,21 +4,23 @@ const apate = new Apate();
 apate.showInfo = true;
 apate.drawCursor = true;
 
-var demoUI = new UI.Window(10, 10, 80, 60, Color.white, true);
-let button = new UI.ClickableButton(6, 2, 42, 9, "Button");
+var demoUI = new UI.Window(10, 10, 80, 60, true);
+demoUI.setColors(Color.gray, Color.agua);
+
+let button = new UI.Button(6, 2, 42, 9, "Button");
 button.onClick = () => {
     console.log("Click");
 };
-demoUI.addComponent(button);
+demoUI.add(button);
 
-let option = new UI.NumericOption(6, 14, "Test", 42);
-demoUI.addComponent(option);
+let option = new UI.NumberSelection(6, 14, "Test", 42);
+demoUI.add(option);
 
-let input = new UI.InputField(6, 24, 50, 9);
-demoUI.addComponent(input);
+let input = new UI.TextBox(6, 24, 50, 9);
+demoUI.add(input);
 
-let dropDown = new UI.OptionSelection(6, 36, ["Test1", "Test2", "Hello World"], 1);
-demoUI.addComponent(dropDown);
+let dropDown = new UI.TextSelection(6, 36, ["Test1", "Test2", "Hello World"], 1);
+demoUI.add(dropDown);
 
 var entity = new Entity();
 entity.set({
