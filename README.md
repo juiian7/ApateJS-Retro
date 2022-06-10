@@ -210,7 +210,7 @@ apate.input.on("mouse", "down", () => {
 });
 
 if (apate.input.isMousePressed) {
-    apate.draw.pixel(apate.input.mousePos.x, apate.input.mousePos.y, Color.agua);
+    apate.draw.pixel(apate.input.mousePos.x, apate.input.mousePos.y, Color.aqua);
 }
 ```
 

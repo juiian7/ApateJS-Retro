@@ -4,7 +4,7 @@
   "description": "A simple 2D retro game engine which runs directly in your browser",
   "main": "dist/apate.js",
   "scripts": {
-    "build": "rollup --config rollup.config.js",
+    "build": "rollup --config rollup.config.js && tsc --project tsconfig.extensions.json",
     "dev": "nodemon --config nodemon.json",
     "test": "eslint src/**/*.ts && prettier --check \"src/**/*.ts\"",
     "format": "prettier src/**/*.ts -w"

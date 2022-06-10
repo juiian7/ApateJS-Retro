@@ -17,8 +17,8 @@ export class Color {
     static dark_indigo = new Color(70, 70, 140);
     static blue = new Color(65, 90, 160);
     static dark_blue = new Color(50, 70, 120);
-    static agua = new Color(80, 170, 220);
-    static dark_agua = new Color(50, 135, 180);
+    static aqua = new Color(80, 170, 220);
+    static dark_aqua = new Color(50, 135, 180);
     static cyan = new Color(60, 220, 180);
     static dark_cyan = new Color(40, 170, 155);
     static mint = new Color(70, 200, 140);
