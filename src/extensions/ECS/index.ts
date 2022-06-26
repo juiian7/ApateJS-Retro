@@ -1,4 +1,5 @@
 type Component = any;
+type Action = (entities: Entity[], delta: number) => {};
 
 class Entity {
     private _world: World;
@@ -37,6 +38,8 @@ class Entity {
 
 export class World {
     private _entities: Entity[] = [];
+    private _systems: System[] = [];
+
     private _typeMap: Map<string, number> = new Map<string, number>();
 
     public typeID(type: string): number {
@@ -61,5 +64,50 @@ export class World {
         for (let i = 0; i < types.length; i++) sum += this.typeID(types[i]);
         for (let i = 0; i < this._entities.length; i++) if ((this._entities[i].filter & sum) == sum) entities.push(this._entities[i]);
         return entities;
+    }
+
+    public system() {
+        let s = new System(this);
+        this._systems.push(s);
+        return s;
+    }
+
+    public tick(delta: number) {
+        for (let i = 0; i < this._systems.length; i++) {
+            this._systems[i].action(this.query(...this._systems[i].types), delta);
+            //optimize and cache...
+        }
+    }
+}
+
+export class System {
+    private _world: World;
+    private _filter: number = 0;
+    private _types: string[] = [];
+
+    public action: Action;
+
+    constructor(world: World) {
+        this._world = world;
+    }
+
+    public for(...types: string[]) {
+        for (let i = 0; i < types.length; i++) {
+            this._types.push(types[i]);
+
+            this._filter += this._world.typeID(types[i]);
+        }
+
+        return this;
+    }
+
+    public do(action: Action) {
+        this.action = action;
+
+        return this;
+    }
+
+    public get types() {
+        return this._types;
     }
 }

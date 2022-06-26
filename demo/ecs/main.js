@@ -13,8 +13,7 @@ let storage = {
 let ecsRunner = new Entity({ storage });
 ecsRunner.set({
     init,
-    update,
-    draw,
+    update: (delta) => storage.world.tick(delta),
 });
 
 apate.activeScene.add(ecsRunner);
@@ -32,9 +31,12 @@ function init() {
             .add("color", randomColor())
             .add(i % 2 == 0 ? "static" : "move");
     }
+
+    storage.world.system().for("move").do(update);
+    storage.world.system().for("position", "color").do(draw);
 }
-function update() {
-    let entities = storage.world.query("move");
+
+function update(entities, delta) {
     for (let i = 0; i < entities.length; i++) {
         let pos = entities[i].get("position");
 
@@ -46,8 +48,7 @@ function update() {
     }
 }
 
-function draw() {
-    let entities = storage.world.query("position", "color");
+function draw(entities, delta) {
     for (let i = 0; i < entities.length; i++) {
         let pos = entities[i].get("position");
         let color = entities[i].get("color");
