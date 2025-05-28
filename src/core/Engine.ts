@@ -31,6 +31,8 @@ export class Engine {
 
     public clearColor: Color = Color.black;
 
+    public readonly isHostAMac = navigator.platform.toUpperCase().indexOf("MAC") >= 0;
+
     public set activeScene(value: Scene) {
         this._activeScene = value;
         this._activeScene.apateInstance = this;

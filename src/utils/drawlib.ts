@@ -1,8 +1,8 @@
 import { Screen } from "../core/Screen";
 import { Color } from "./color.js";
-import { spritelib } from "./spritelib.js";
+import { Sprite, spritelib } from "./spritelib.js";
 
-type Sprite = ImageData;
+export type PixelArray = { x: number; y: number; c?: Color }[];
 
 export class DrawLib {
     private screen: Screen;
@@ -20,12 +20,12 @@ export class DrawLib {
         this._cameraOffsetX = x;
         this._cameraOffsetY = y;
     }
+    public getOffset(): { x: number; y: number } {
+        return { x: this._cameraOffsetX, y: this._cameraOffsetY };
+    }
 
     public async loadFont(url: string, characters: string, charWidth: number) {
-        let data: Sprite;
-
-        data = await spritelib.load(url);
-
+        let data: Sprite = await spritelib.load(url);
         let chars = spritelib.split(data, charWidth, data.height, 0);
 
         if (chars.length != characters.length) console.error("Characters do not match with image!");
@@ -40,20 +40,51 @@ export class DrawLib {
             }
             this.fontMap[characters[i]] = chars[i];
         }
-
-        console.log(this.fontMap);
     }
 
     public pixel(x: number, y: number, c: Color) {
         this.screen.setPixel(x + this._cameraOffsetX, y + this._cameraOffsetY, c.r, c.g, c.b);
     }
 
-    public rect(x: number, y: number, w: number, h: number, c: Color) {
-        for (let i = 0; i < w; i++) {
-            for (let j = 0; j < h; j++) {
-                this.screen.setPixel(i + x + this._cameraOffsetX, j + y + this._cameraOffsetY, c.r, c.g, c.b);
+    public pixelArr(x: number, y: number, c: Color, pixels: PixelArray) {
+        for (let i = 0; i < pixels.length; i++) {
+            this.pixel(x + pixels[i].x, y + pixels[i].y, pixels[i].c ?? c);
+        }
+    }
+
+    public rect(x: number, y: number, w: number, h: number, c: Color, filled: boolean = true) {
+        if (filled) {
+            for (let i = 0; i < w; i++) {
+                for (let j = 0; j < h; j++) {
+                    this.pixel(i + x, j + y, c);
+                }
+            }
+        } else {
+            this.line(x, y, x + w - 1, y, c);
+            this.line(x, y + h, x + w - 1, y + h, c);
+            this.line(x, y, x, y + h, c);
+            this.line(x + w - 1, y, x + w - 1, y + h - 1, c);
+        }
+    }
+
+    public line(x1: number, y1: number, x2: number, y2: number, c: Color) {
+        let dx = x2 - x1;
+        let dy = y2 - y1;
+        if (Math.abs(dx) > Math.abs(dy)) {
+            let k = dy / dx;
+            for (let x = 0; dx >= 0 ? x < dx : x > dx; dx >= 0 ? x++ : x--) {
+                this.pixel(x + x1, Math.round(k * x) + y1, c);
+            }
+        } else {
+            let k = dx / dy;
+            for (let y = 0; dy >= 0 ? y < dy : y > dy; dy >= 0 ? y++ : y--) {
+                this.pixel(Math.round(k * y) + x1, y + y1, c);
             }
         }
+
+        // draw begin and end to avoid ignoring those due to rounding
+        this.pixel(x1, y1, c);
+        this.pixel(x2, y2, c);
     }
 
     public sprite(x: number, y: number, sprite: Sprite) {

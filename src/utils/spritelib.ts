@@ -1,6 +1,6 @@
 import { Color } from "./color.js";
 
-type Sprite = ImageData;
+export type Sprite = ImageData;
 
 class SpriteLib {
     canvas: HTMLCanvasElement;
