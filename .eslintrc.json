@@ -20,5 +20,6 @@
         "prefer-const": "off",
         "no-var": "off",
         "no-self-assign": "off"
-    }
+    },
+    "ignorePatterns": ["dist/"]
 }
