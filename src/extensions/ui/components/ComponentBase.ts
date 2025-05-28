@@ -1,7 +1,7 @@
-import { Apate, Color, DrawLib } from "../../apate.js";
-import { Window } from "./Window.js";
+import { Apate, Color, DrawLib } from "../../../apate.js";
+import { Window } from "../Window.js";
 
-export abstract class WindowComponent {
+export abstract class ComponentBase {
     public x: number;
     public y: number;
     public width: number;
@@ -16,14 +16,19 @@ export abstract class WindowComponent {
 
     public backColor: Color;
     public frontColor: Color;
-    public markedBackColor: Color;
-    public markedFrontColor: Color;
+    public highlightBackColor: Color;
+    public highlightFrontColor: Color;
 
-    public setColors(backColor: Color | null, frontColor: Color | null, markedBackColor?: Color, markedFrontColor?: Color) {
+    public setColors(backColor: Color | null, frontColor: Color | null, highlightBackColor?: Color, highlightFrontColor?: Color) {
         this.backColor = backColor ?? null;
         this.frontColor = frontColor ?? null;
-        this.markedBackColor = markedBackColor ?? backColor;
-        this.markedFrontColor = markedFrontColor ?? frontColor;
+        this.highlightBackColor = highlightBackColor ?? backColor;
+        this.highlightFrontColor = highlightFrontColor ?? frontColor;
+    }
+
+    public setHighlightColors(highlightBackColor: Color | null, highlightFrontColor: Color | null) {
+        this.highlightBackColor = highlightBackColor ?? this.backColor;
+        this.highlightFrontColor = highlightFrontColor ?? this.frontColor;
     }
 
     public readonly selected: boolean;

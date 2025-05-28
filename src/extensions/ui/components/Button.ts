@@ -1,8 +1,7 @@
 import { Color, DrawLib, PixelArray, Sprite } from "../../../apate.js";
-import { WindowComponent } from "../Component.js";
+import { ComponentBase } from "./ComponentBase.js";
 
-// TODO: Input, blink?
-export class Button extends WindowComponent {
+export class Button extends ComponentBase {
     private text: string;
     private pixelArr: PixelArray;
     private sprite: Sprite;
@@ -11,14 +10,14 @@ export class Button extends WindowComponent {
 
     constructor(x, y, width, height, displayObj?: string | PixelArray | Sprite) {
         super(x, y, width, height);
-        this.setColors(Color.blue, Color.black);
+        this.setColors(Color.blue, Color.black, null, Color.red);
 
         if (displayObj != null) {
             this.setDisplay(displayObj);
         }
     }
 
-    public setDisplay(obj: string | PixelArray | Sprite) {
+    public setDisplay(obj: string | PixelArray | Sprite): void {
         if (typeof obj == "string") {
             this.text = obj as string;
         } else if (obj?.[0]?.x != null && obj?.[0]?.y != null) {
@@ -31,18 +30,21 @@ export class Button extends WindowComponent {
     }
 
     draw(draw: DrawLib): void {
-        if (this.backColor != null) {
-            draw.rect(this.x, this.y, this.width, this.height, this.backColor);
+        let frontColor = this.selected ? this.highlightFrontColor : this.frontColor;
+        let backColor = this.selected ? this.highlightBackColor : this.backColor;
+
+        if (backColor != null) {
+            draw.rect(this.x, this.y, this.width, this.height, backColor);
         }
 
         if (this.text != null) {
             let textLength = draw.measureText(this.text);
             let tx = Math.round(this.x + (this.width - textLength) / 2);
             let ty = Math.round(this.y + (this.height - 5) / 2);
-            draw.text(tx, ty, this.text, this.frontColor);
+            draw.text(tx, ty, this.text, frontColor);
         }
         if (this.pixelArr != null) {
-            draw.pixelArr(this.x, this.y, this.frontColor, this.pixelArr);
+            draw.pixelArr(this.x, this.y, frontColor, this.pixelArr);
         }
         if (this.sprite != null) {
             draw.sprite(this.x, this.y, this.sprite);

@@ -1,14 +1,14 @@
 import { Color, DrawLib } from "../../../apate.js";
-import { WindowComponent } from "../Component.js";
+import { ComponentBase } from "./ComponentBase.js";
 import { Icon } from "../utils/icon.js";
 
-export class TextSelection extends WindowComponent {
+export class TextSelection extends ComponentBase {
     public options: string[];
     public selectedIndex: number;
 
     constructor(x, y, options: string[], selectedIndex?: number) {
         super(x, y, 0, 7);
-        this.setColors(null, Color.black);
+        this.setColors(null, Color.black, null, Color.red);
 
         this.options = options ?? [];
 
@@ -22,16 +22,19 @@ export class TextSelection extends WindowComponent {
     }
 
     draw(draw: DrawLib): void {
+        let frontColor = this.selected ? this.highlightFrontColor : this.frontColor;
+        let backColor = this.selected ? this.highlightBackColor : this.backColor;
+
         let text = this.options[this.selectedIndex];
         let textLength = draw.measureText(text);
         this.width = 4 + 2 + textLength + 2 + 4;
 
-        if (this.backColor != null) {
-            draw.rect(this.x, this.y, this.width, this.height, this.backColor);
+        if (backColor != null) {
+            draw.rect(this.x, this.y, this.width, this.height, backColor);
         }
 
         Icon.rightArrow.draw(draw, this.x, this.y, this.parent.backColor === Color.gray ? Color.light_gray : Color.gray);
-        draw.text(this.x + 7, this.y + 1, text, this.frontColor);
+        draw.text(this.x + 7, this.y + 1, text, frontColor);
         Icon.leftArrow.draw(draw, this.x + 8 + textLength, this.y, this.parent.backColor === Color.gray ? Color.light_gray : Color.gray);
     }
 

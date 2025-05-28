@@ -1,6 +1,8 @@
 import { Color, DrawLib, PixelArray } from "../../../apate";
 
 export class Icon {
+    //#region icons
+
     static rightArrow = new Icon([
         { x: 0, y: 3 },
         { x: 1, y: 2 },
@@ -38,6 +40,8 @@ export class Icon {
         { x: 2, y: 4 },
         { x: 3, y: 3 },
     ]);
+
+    //#endregion
 
     public readonly pixels: PixelArray;
 

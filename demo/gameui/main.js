@@ -8,6 +8,7 @@ var demoUI = new UI.Window(10, 10, 80, 60, true);
 demoUI.setColors(Color.gray, Color.agua);
 
 let button = new UI.Button(6, 2, 42, 9, "Button");
+//button.setColors(Color.dark_blue, Color.light_green, Color.dark_agua, Color.light_green);
 button.onClick = () => {
     console.log("Click");
 };

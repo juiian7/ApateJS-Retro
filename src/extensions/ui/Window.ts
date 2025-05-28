@@ -1,5 +1,5 @@
 import { Button, Color, DrawLib, Entity } from "../../apate.js";
-import { WindowComponent } from "./Component.js";
+import { ComponentBase } from "./components/ComponentBase.js";
 import { Button as WindowButton } from "./components/Button.js";
 
 export class Window extends Entity {
@@ -7,7 +7,7 @@ export class Window extends Entity {
     private y: number;
     private width: number;
     private height: number;
- 
+
     // TODO: get/set ?
     public backColor: Color;
     public accentColor: Color;
@@ -18,7 +18,7 @@ export class Window extends Entity {
     private titleBarHeld: boolean;
     private titleBarHeldPrev: { x: number; y: number } | null;
 
-    private components: WindowComponent[];
+    private components: ComponentBase[];
     private _selectedIndex: number;
 
     set selectedIndex(index) {
@@ -83,11 +83,11 @@ export class Window extends Entity {
      * TODO: Remove this bevor release
      * @deprecated
      */
-    public addComponent(component: WindowComponent) {
+    public addComponent(component: ComponentBase) {
         this.add(component);
     }
 
-    public add(component: WindowComponent) {
+    public add(component: ComponentBase) {
         // @ts-ignore
         component.parent = this;
         // @ts-ignore

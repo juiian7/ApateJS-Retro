@@ -1,5 +1,5 @@
 import { Color, DrawLib } from "../../../apate.js";
-import { WindowComponent } from "../Component.js";
+import { ComponentBase } from "./ComponentBase.js";
 
 // TODO
 export enum TextAlignment {
@@ -14,27 +14,44 @@ export enum TextInputType {
     LETTERS,
 }
 
-export class TextBox extends WindowComponent {
+export class TextBox extends ComponentBase {
     public acceptedValues: TextInputType;
     public text: string;
+    private cursorTick: number;
 
     constructor(x, y, width, height?: number, text?: string, acceptedValues?: TextInputType) {
         super(x, y, width, height ?? 9);
-        this.setColors(Color.black, Color.white);
+        this.setColors(Color.black, Color.white, null, Color.red);
 
         this.text = text ?? "";
         this.acceptedValues = acceptedValues ?? TextInputType.ALL;
+        this.cursorTick = 0;
     }
 
     draw(draw: DrawLib): void {
-        if (this.backColor) {
-            draw.rect(this.x, this.y, this.width, this.height, this.backColor);
+        let frontColor = this.selected ? this.highlightFrontColor : this.frontColor;
+        let backColor = this.selected ? this.highlightBackColor : this.backColor;
+
+        if (backColor) {
+            draw.rect(this.x, this.y, this.width, this.height, backColor);
         }
 
         let textLength = draw.measureText(this.text);
         let tx = Math.round(this.x + (this.width - textLength) / 2);
         let ty = Math.round(this.y + (this.height - 5) / 2);
-        draw.text(tx, ty, this.text, this.frontColor);
+        draw.text(tx, ty, this.text, frontColor);
+
+        if (this.cursorTick % 2000 > 800) {
+            draw.text(tx + textLength, ty, ".", frontColor);
+        }
+    }
+
+    public update(delta: number): void {
+        if (this.selected) {
+            this.cursorTick += delta;
+        } else {
+            this.cursorTick = 0;
+        }
     }
 
     keyDown(ev: KeyboardEvent): void {

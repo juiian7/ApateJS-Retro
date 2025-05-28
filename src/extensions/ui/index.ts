@@ -1,5 +1,5 @@
 export { Window } from "./Window.js";
-export { WindowComponent } from "./Component.js";
+export { ComponentBase as WindowComponent } from "./components/ComponentBase.js";
 
 // ./components/
 export { Button } from "./components/Button.js";
