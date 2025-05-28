@@ -11,7 +11,7 @@ export class Scene {
     set apateInstance(value: Engine) {
         this._apateInstance = value;
 
-        // automaticlly reinit entities when instance is changed
+        // automatically reinit entities when instance is changed
         for (let i = 0; i < this.entities.length; i++) {
             this.entities[i].apate = value;
             this.entities[i].init();
@@ -23,9 +23,9 @@ export class Scene {
         return this._apateInstance;
     }
 
-    constructor(transition?: Transition, apateInstace?: Engine) {
+    constructor(transition?: Transition, apateInstance?: Engine) {
         this._transition = transition;
-        this._apateInstance = apateInstace;
+        this._apateInstance = apateInstance;
     }
 
     add(entity: Entity) {
