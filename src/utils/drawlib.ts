@@ -96,7 +96,13 @@ export class DrawLib {
                 for (dx = 0; dx < scale; dx++) {
                     for (dy = 0; dy < scale; dy++) {
                         if (color) {
-                            this.screen.setPixel(px + dx + x, py + dy + y, (sprite.data[i] + color.r) / 2, (sprite.data[i + 1] + color.g) / 2, (sprite.data[i + 2] + color.b) / 2);
+                            this.screen.setPixel(
+                                px + dx + x,
+                                py + dy + y,
+                                (sprite.data[i] + color.r) / 2,
+                                (sprite.data[i + 1] + color.g) / 2,
+                                (sprite.data[i + 2] + color.b) / 2
+                            );
                         } else {
                             this.screen.setPixel(px + dx + x, py + dy + y, sprite.data[i], sprite.data[i + 1], sprite.data[i + 2]);
                         }
@@ -114,7 +120,11 @@ export class DrawLib {
             char = this.fontMap[text[i]];
 
             if (char) {
-                this.spriteExt(x + i * (char.width + leftMargin) * scale, y, char, scale, { r: (c.r - 128) * 2, g: (c.g - 128) * 2, b: (c.b - 128) * 2 }); // to overwrite color
+                this.spriteExt(x + i * (char.width + leftMargin) * scale, y, char, scale, {
+                    r: (c.r - 128) * 2,
+                    g: (c.g - 128) * 2,
+                    b: (c.b - 128) * 2,
+                }); // to overwrite color
             } else this.pixel(x + i * (4 + leftMargin) * scale, y, c);
         }
     }
